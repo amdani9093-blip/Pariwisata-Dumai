@@ -1,0 +1,1130 @@
+/* ==========================================================
+   VISIT DUMAI - STYLE.CSS
+   ========================================================== */
+
+/* ================= GOOGLE FONT ================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ================= RESET ================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f5f8fc;
+    color:#333;
+    line-height:1.7;
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+.mt-5{
+    margin-top:60px;
+}
+
+.text-center{
+    text-align:center;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:999;
+    background:#0c4a6e;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.navbar .container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height:75px;
+}
+
+.logo{
+    color:#fff;
+    text-decoration:none;
+    font-size:26px;
+    font-weight:700;
+}
+
+.logo i{
+    color:#FFD54F;
+    margin-right:8px;
+}
+
+.nav-menu{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+.nav-menu a{
+    text-decoration:none;
+    color:white;
+    font-weight:500;
+    transition:.3s;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active{
+    color:#FFD54F;
+}
+
+.menu-toggle{
+    display:none;
+    color:#fff;
+    font-size:26px;
+    cursor:pointer;
+}
+
+/* ================= HERO ================= */
+
+.hero-page{
+    background:linear-gradient(rgba(0,0,0,.55),
+    rgba(0,0,0,.55)),
+    url('../images/hero.jpg') center/cover;
+    padding:120px 20px;
+    color:white;
+}
+
+.hero-page h1{
+    font-size:48px;
+    margin-bottom:20px;
+}
+
+.hero-page p{
+    max-width:700px;
+    margin:auto;
+    opacity:.95;
+}
+
+.search-box{
+    margin-top:35px;
+}
+
+.search-box input{
+    width:100%;
+    max-width:500px;
+    padding:15px;
+    border:none;
+    border-radius:50px;
+    outline:none;
+    font-size:16px;
+    box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+
+/* ================= FILTER ================= */
+
+.filter-menu{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.filter-btn{
+    border:none;
+    background:#fff;
+    padding:12px 28px;
+    border-radius:30px;
+    cursor:pointer;
+    transition:.3s;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    font-weight:600;
+}
+
+.filter-btn:hover,
+.filter-btn.active{
+    background:#0c4a6e;
+    color:white;
+}
+
+/* ================= GRID ================= */
+
+.card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:30px;
+}
+
+/* ================= CARD ================= */
+
+.destination-card{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    transition:.35s;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.destination-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 20px 40px rgba(0,0,0,.15);
+}
+
+.destination-card img{
+    width:100%;
+    height:230px;
+    object-fit:cover;
+}
+
+.card-body{
+    padding:22px;
+}
+
+.badge{
+    display:inline-block;
+    background:#14b8a6;
+    color:white;
+    padding:6px 15px;
+    border-radius:30px;
+    font-size:13px;
+    margin-bottom:15px;
+}
+
+.card-body h3{
+    font-size:24px;
+    margin-bottom:10px;
+    color:#0c4a6e;
+}
+
+.rating{
+    margin-bottom:15px;
+    color:#f59e0b;
+    font-size:18px;
+}
+
+.card-body p{
+    color:#666;
+    margin-bottom:20px;
+}
+
+.info-list{
+    list-style:none;
+}
+
+.info-list li{
+    margin-bottom:8px;
+}
+
+.status.open{
+    color:green;
+    font-weight:600;
+}
+
+.status.close{
+    color:red;
+    font-weight:600;
+}
+
+/* ================= BUTTON ================= */
+
+.card-action{
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+}
+
+.btn-primary,
+.btn-secondary{
+    flex:1;
+    text-align:center;
+    text-decoration:none;
+    padding:12px;
+    border-radius:10px;
+    transition:.3s;
+    font-weight:600;
+}
+
+.btn-primary{
+    background:#0c4a6e;
+    color:white;
+}
+
+.btn-primary:hover{
+    background:#08344d;
+}
+
+.btn-secondary{
+    background:#14b8a6;
+    color:white;
+}
+
+.btn-secondary:hover{
+    background:#0f766e;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    background:#0c4a6e;
+    color:white;
+    margin-top:80px;
+}
+
+.footer-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:35px;
+    padding:60px 0;
+}
+
+.footer-grid h2,
+.footer-grid h3{
+    margin-bottom:18px;
+}
+
+.footer-grid ul{
+    list-style:none;
+}
+
+.footer-grid ul li{
+    margin-bottom:10px;
+}
+
+.footer-grid a{
+    color:white;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.footer-grid a:hover{
+    color:#FFD54F;
+}
+
+.social{
+    display:flex;
+    gap:12px;
+    margin-top:15px;
+}
+
+.social a{
+    width:42px;
+    height:42px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:50%;
+    background:white;
+    color:#0c4a6e;
+    transition:.3s;
+}
+
+.social a:hover{
+    background:#FFD54F;
+}
+
+.copyright{
+    text-align:center;
+    padding:20px;
+    border-top:1px solid rgba(255,255,255,.15);
+}
+
+/* ================= SCROLL BUTTON ================= */
+
+#scrollTop{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    width:50px;
+    height:50px;
+    border:none;
+    border-radius:50%;
+    background:#14b8a6;
+    color:white;
+    cursor:pointer;
+    display:none;
+    font-size:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+#scrollTop:hover{
+    background:#0c4a6e;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:768px){
+
+    .menu-toggle{
+        display:block;
+    }
+
+    .nav-menu{
+        position:absolute;
+        top:75px;
+        left:0;
+        width:100%;
+        background:#0c4a6e;
+        flex-direction:column;
+        display:none;
+        padding:20px;
+    }
+
+    .nav-menu.show{
+        display:flex;
+    }
+
+    .hero-page{
+        padding:90px 20px;
+    }
+
+    .hero-page h1{
+        font-size:34px;
+    }
+
+    .card-action{
+        flex-direction:column;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .hero-page h1{
+        font-size:28px;
+    }
+
+    .hero-page p{
+        font-size:15px;
+    }
+
+    .search-box input{
+        width:100%;
+    }
+
+}
+
+/* ================= FORM ================= */
+
+.form-group{
+    margin-bottom:20px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#0c4a6e;
+}
+
+.form-control{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-size:16px;
+    transition:.3s;
+}
+
+.form-control:focus{
+    outline:none;
+    border-color:#14b8a6;
+    box-shadow:0 0 10px rgba(20,184,166,.2);
+}
+
+textarea.form-control{
+    resize:vertical;
+}
+
+button.btn-primary{
+    border:none;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+}
+
+.hero-page{
+    height:350px;
+    background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+    url("../images/hero-dumai.jpg") center/cover no-repeat;
+    display:flex;
+    align-items:center;
+}
+
+.hero-page h1{
+    font-weight:700;
+    font-size:50px;
+}
+
+.hero-page p{
+    max-width:700px;
+    margin:auto;
+}
+
+.card{
+    border-radius:18px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+.bg-primary{
+    background:linear-gradient(135deg,#0d6efd,#0a58ca)!important;
+}
+
+:root {
+        --ocean-deep:  #052E3E;
+        --ocean:       #0B4F6C;
+        --sea-teal:    #148B9C;
+        --sand-gold:   #E3A23B;
+        --sand-gold-d: #C9860F;
+        --foam:        #F3F9FA;
+        --ink:         #12313C;
+        --ink-soft:    #5C7681;
+        --font-display: 'Poppins', sans-serif;
+        --font-body: 'Nunito Sans', sans-serif;
+    }
+
+    body { font-family: var(--font-body); color: var(--ink); background: var(--foam); }
+
+    /* ================= HERO — pantai fixed background ================= */
+    .hero-page {
+        position: relative;
+        min-height: 88vh;
+        display: flex;
+        align-items: center;
+        color: #fff;
+        overflow: hidden;
+        background-image:
+            linear-gradient(180deg, rgba(5,46,62,.75) 0%, rgba(11,79,108,.55) 50%, rgba(5,46,62,.92) 100%),
+            url('{{ asset("images/pantai-dumai.jpg") }}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed; /* efek "screensaver" saat scroll */
+    }
+    @supports (-webkit-touch-callout: none) {
+        .hero-page { background-attachment: scroll; }
+    }
+    .hero-page .container { position: relative; z-index: 2; }
+    .hero-content { max-width: 720px; margin: 0 auto; }
+    .hero-eyebrow {
+        display: inline-block;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-size: .78rem;
+        color: var(--sand-gold);
+        background: rgba(255,255,255,.08);
+        border: 1px solid rgba(255,255,255,.25);
+        padding: 6px 18px;
+        border-radius: 30px;
+        margin-bottom: 22px;
+    }
+    .hero-content h1 {
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: clamp(2.1rem, 4.8vw, 3.5rem);
+        letter-spacing: .3px;
+        text-shadow: 0 2px 18px rgba(0,0,0,.25);
+    }
+    .hero-content > p {
+        font-size: 1.1rem;
+        line-height: 1.75;
+        opacity: .95;
+        margin: 18px auto 0;
+    }
+
+    .search-box { max-width: 480px; margin: 0 auto; position: relative; }
+    .search-box::before {
+        content: "\f002";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        position: absolute;
+        left: 22px; top: 50%;
+        transform: translateY(-50%);
+        color: var(--ink-soft);
+        font-size: .95rem;
+    }
+    .search-box input {
+        width: 100%;
+        border: none;
+        border-radius: 40px;
+        padding: 16px 24px 16px 52px;
+        font-size: 1rem;
+        font-family: var(--font-body);
+        color: var(--ink);
+        box-shadow: 0 14px 34px rgba(5,46,62,.28);
+        outline: none;
+        transition: box-shadow .2s ease;
+    }
+    .search-box input:focus { box-shadow: 0 14px 34px rgba(5,46,62,.28), 0 0 0 3px var(--sand-gold); }
+
+    .wave-divider {
+        position: absolute;
+        left: 0; right: 0; bottom: -1px;
+        line-height: 0;
+        z-index: 2;
+    }
+    .wave-divider svg { width: 100%; height: 70px; display: block; }
+
+    /* ================= FILTER ================= */
+    .filter-menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin: 46px 0 8px;
+    }
+    .filter-btn {
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: .92rem;
+        color: var(--ocean-deep);
+        background: #fff;
+        border: 1px solid #dfe8ea;
+        padding: 10px 26px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+    .filter-btn:hover { border-color: var(--sea-teal); color: var(--sea-teal); }
+    .filter-btn.active {
+        background: linear-gradient(135deg, var(--ocean), var(--sea-teal));
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 8px 18px rgba(11,79,108,.28);
+    }
+
+    /* ================= DESTINASI CARDS ================= */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .card-grid a{
+    text-decoration: none;
+}
+
+    .destination-card {
+        background: #fff;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 26px rgba(5,46,62,.08);
+        border: 1px solid #eef2f4;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        transform: translateY(26px) scale(.98);
+        transition: opacity .6s ease, transform .6s ease, box-shadow .25s ease;
+    }
+    .destination-card.in-view { opacity: 1; transform: translateY(0) scale(1); }
+    .destination-card:hover {
+        box-shadow: 0 20px 40px rgba(5,46,62,.16);
+        transform: translateY(-6px);
+    }
+    .destination-card.in-view:hover { transform: translateY(-6px) scale(1); }
+
+    .card-media { position: relative; height: 210px; overflow: hidden; }
+    .card-media img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transition: transform .4s ease;
+    }
+    .destination-card:hover .card-media img { transform: scale(1.06); }
+    .card-media .badge {
+        position: absolute;
+        top: 14px; left: 14px;
+        background: rgba(5,46,62,.82);
+        color: #fff;
+        font-size: .74rem;
+        font-weight: 700;
+        letter-spacing: .4px;
+        text-transform: uppercase;
+        padding: 5px 14px;
+        border-radius: 20px;
+    }
+
+    .card-body { padding: 22px 24px 26px; display: flex; flex-direction: column; flex: 1; }
+    .card-body h3 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.18rem;
+        color: var(--ocean-deep);
+        margin-bottom: 6px;
+    }
+    .rating { color: var(--sand-gold-d); font-size: .92rem; margin-bottom: 10px; }
+    .rating small { color: var(--ink-soft); margin-left: 4px; }
+
+    .card-body > p {
+        color: var(--ink-soft);
+        font-size: .94rem;
+        line-height: 1.65;
+        margin-bottom: 16px;
+    }
+
+    .info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 20px;
+        border-top: 1px dashed #e3eaec;
+        padding-top: 14px;
+    }
+    .info-list li {
+        font-size: .88rem;
+        color: var(--ink-soft);
+        margin-bottom: 7px;
+    }
+    .info-list li:last-child { margin-bottom: 0; }
+    .info-list .status.open { color: #1E8E5A; font-weight: 600; }
+    .info-list .status.closed { color: #C0392B; font-weight: 600; }
+
+    .card-action { margin-top: auto; }
+    .btn-secondary {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        background: var(--foam);
+        color: var(--ocean);
+        font-weight: 700;
+        font-size: .92rem;
+        padding: 10px 0;
+        border-radius: 30px;
+        border: 1px solid #dcecef;
+        text-decoration: none;
+        transition: background .2s ease, color .2s ease;
+    }
+    .btn-secondary:hover { background: var(--ocean); color: #fff; }
+
+    @media (max-width: 767px) {
+        .hero-page { min-height: 72vh; }
+        .filter-menu { gap: 8px; }
+        .filter-btn { padding: 8px 18px; font-size: .86rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .destination-card, .card-media img, .btn-secondary, .filter-btn { transition: none; }
+    }
+
+    /* ===================================
+   KULINER.CSS
+   Website Pariwisata Kota Dumai
+=================================== */
+
+:root{
+    --primary:#0F766E;
+    --secondary:#F59E0B;
+    --danger:#EF4444;
+    --success:#16A34A;
+    --light:#F8FAFC;
+    --white:#ffffff;
+    --dark:#1F2937;
+    --gray:#6B7280;
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+    --radius:18px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f5f7fa;
+    color:#333;
+    line-height:1.7;
+}
+
+/* ================= HERO ================= */
+
+.hero-page{
+    position:relative;
+    background:linear-gradient(rgba(15,118,110,.65),rgba(15,118,110,.65)),
+    url("../images/kuliner-bg.jpg") center/cover no-repeat;
+    padding:120px 20px;
+    color:#fff;
+    text-align:center;
+}
+
+.hero-page h1{
+    font-size:48px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.hero-page p{
+    max-width:700px;
+    margin:auto;
+    font-size:18px;
+    opacity:.95;
+}
+
+.hero-eyebrow{
+    display:inline-block;
+    padding:8px 20px;
+    background:rgba(255,255,255,.18);
+    border-radius:50px;
+    margin-bottom:20px;
+    backdrop-filter:blur(10px);
+}
+
+/* ================= SEARCH ================= */
+
+.search-box{
+    max-width:600px;
+    margin:40px auto 0;
+}
+
+.search-box input{
+    width:100%;
+    padding:16px 22px;
+    border:none;
+    border-radius:50px;
+    font-size:16px;
+    box-shadow:var(--shadow);
+}
+
+.search-box input:focus{
+    outline:none;
+}
+
+/* ================= TITLE ================= */
+
+.section-title{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.section-title h2{
+    font-size:36px;
+    color:var(--primary);
+    margin-bottom:10px;
+}
+
+.section-title p{
+    color:var(--gray);
+}
+
+/* ================= FILTER ================= */
+
+.filter-menu{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:12px;
+    margin:40px 0;
+}
+
+.filter-btn{
+    border:none;
+    padding:12px 24px;
+    border-radius:30px;
+    background:#fff;
+    cursor:pointer;
+    transition:.3s;
+    font-weight:600;
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+
+.filter-btn:hover,
+.filter-btn.active{
+    background:var(--primary);
+    color:#fff;
+}
+
+/* ================= GRID ================= */
+
+.card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:30px;
+}
+
+/* ================= CARD ================= */
+
+.food-card{
+    background:#fff;
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    transition:.35s;
+}
+
+.food-card:hover{
+    transform:translateY(-10px);
+}
+
+.food-image{
+    position:relative;
+    height:240px;
+    overflow:hidden;
+}
+
+.food-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.5s;
+}
+
+.food-card:hover img{
+    transform:scale(1.08);
+}
+
+/* ================= BADGE ================= */
+
+.badge{
+    position:absolute;
+    top:15px;
+    left:15px;
+    background:var(--secondary);
+    color:#fff;
+    padding:8px 14px;
+    border-radius:30px;
+    font-size:13px;
+    font-weight:600;
+}
+
+/* ================= BODY ================= */
+
+.food-body{
+    padding:24px;
+}
+
+.food-body h3{
+    color:var(--primary);
+    margin-bottom:10px;
+}
+
+.food-body p{
+    color:#666;
+    margin-bottom:18px;
+}
+
+/* ================= INFO ================= */
+
+.food-info{
+    list-style:none;
+    margin-bottom:20px;
+}
+
+.food-info li{
+    margin-bottom:8px;
+    color:#555;
+    font-size:15px;
+}
+
+/* ================= RATING ================= */
+
+.rating{
+    color:#fbbf24;
+    font-size:18px;
+    margin-bottom:15px;
+}
+
+/* ================= PRICE ================= */
+
+.price{
+    display:inline-block;
+    background:#E8F5E9;
+    color:var(--success);
+    padding:8px 16px;
+    border-radius:30px;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+/* ================= BUTTON ================= */
+
+.btn-primary{
+    display:inline-block;
+    width:100%;
+    text-align:center;
+    padding:13px;
+    background:var(--primary);
+    color:#fff;
+    border-radius:12px;
+    text-decoration:none;
+    transition:.3s;
+    font-weight:600;
+}
+
+.btn-primary:hover{
+    background:#0a5f58;
+    color:#fff;
+}
+
+.btn-secondary{
+    display:inline-block;
+    width:100%;
+    text-align:center;
+    padding:13px;
+    margin-top:10px;
+    background:#f1f5f9;
+    color:#333;
+    border-radius:12px;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.btn-secondary:hover{
+    background:var(--secondary);
+    color:#fff;
+}
+
+/* ================= EMPTY ================= */
+
+.empty-state{
+    text-align:center;
+    padding:80px 20px;
+    color:#888;
+}
+
+.empty-state i{
+    font-size:60px;
+    color:var(--primary);
+    margin-bottom:20px;
+}
+
+/* ================= ANIMATION ================= */
+
+.food-card{
+    opacity:0;
+    transform:translateY(40px);
+    transition:.7s;
+}
+
+.food-card.in-view{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* ================= FOOTER CTA ================= */
+
+.cta-box{
+    background:linear-gradient(135deg,var(--primary),#14b8a6);
+    padding:70px;
+    border-radius:25px;
+    color:#fff;
+    text-align:center;
+    margin-top:80px;
+}
+
+.cta-box h2{
+    margin-bottom:15px;
+}
+
+.cta-box p{
+    max-width:700px;
+    margin:auto auto 30px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:992px){
+
+.hero-page h1{
+    font-size:38px;
+}
+
+.section-title h2{
+    font-size:30px;
+}
+
+}
+
+@media(max-width:768px){
+
+.hero-page{
+    padding:90px 20px;
+}
+
+.hero-page h1{
+    font-size:30px;
+}
+
+.hero-page p{
+    font-size:15px;
+}
+
+.card-grid{
+    grid-template-columns:1fr;
+}
+
+.search-box{
+    width:100%;
+}
+
+.filter-menu{
+    gap:10px;
+}
+
+.filter-btn{
+    width:100%;
+}
+
+.cta-box{
+    padding:40px 25px;
+}
+
+}
+.destination-card{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    transition:.35s;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    height:100%;
+}
+
+.destination-card:hover{
+    transform:translateY(-8px);
+}
+
+.destination-card .img-box{
+    height:230px;
+    overflow:hidden;
+}
+
+.destination-card .img-box img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.5s;
+}
+
+.destination-card:hover img{
+    transform:scale(1.08);
+}
+
+.destination-card .body-box{
+    padding:25px;
+}
+
+.destination-card h4{
+    color:#0B4F6C;
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+.destination-card p{
+    color:#666;
+    line-height:1.8;
+}
+
