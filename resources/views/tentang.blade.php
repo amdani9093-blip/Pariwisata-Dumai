@@ -33,8 +33,8 @@
         color: #fff;
         overflow: hidden;
         background-image:
-            linear-gradient(180deg, rgba(5,46,62,.85) 0%, rgba(11,79,108,.7) 50%, rgba(5,46,62,.95) 100%),
-            url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80');
+            linear-gradient(180deg, rgba(255, 251, 0, 0.85) 0%, rgba(0, 179, 255, 0.7) 50%, rgba(5,46,62,.95) 100%),
+            url('{{ asset('images/2384ab08-a6b2-42fe-9217-dbcc34b17694.png') }}');">
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
@@ -924,5 +924,6 @@
     }
 })();
 </script>
+
 
 @endsection
