@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('body-class', 'page-destinasi-detail')
 @section('title', $destinasi->nama . ' - Detail Destinasi')
 
 @section('content')

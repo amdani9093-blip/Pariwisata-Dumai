@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\DestinasiController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AtraksiController;
 
 
 
@@ -38,6 +39,13 @@ Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit'
 Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
 Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 
+// URUTAN YANG BENAR
+Route::get('/atraksi', [AtraksiController::class, 'index'])->name('atraksi');
+Route::get('/atraksi/create', [AtraksiController::class, 'create'])->name('atraksi.create'); // harus di atas
+Route::post('/atraksi', [AtraksiController::class, 'store'])->name('atraksi.store');
+Route::get('/atraksi/{id}/edit', [AtraksiController::class, 'edit'])->name('atraksi.edit');
+Route::put('/atraksi/{id}', [AtraksiController::class, 'update'])->name('atraksi.update');
+Route::delete('/atraksi/{id}', [AtraksiController::class, 'destroy'])->name('atraksi.destroy');
 
 
 Route::get('/kontak', function () {

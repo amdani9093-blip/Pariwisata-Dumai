@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Destinasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DestinasiController extends Controller
 {
@@ -59,11 +60,16 @@ class DestinasiController extends Controller
         $validated = $request->validate([
             'nama'      => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'gambar'    => 'required|string|max:255',
-            'jam_buka'  => 'required',
-            'jam_tutup' => 'required',
+            'gambar'    => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'jam_buka'  => 'required|date_format:H:i',
+            'jam_tutup' => 'required|date_format:H:i|after:jam_buka',
             'lokasi'    => 'nullable|string|max:255',
         ]);
+
+        // simpan file gambar ke storage/app/public/destinasi,
+        // simpan hanya nama filenya ke database
+        $path = $request->file('gambar')->store('destinasi', 'public');
+        $validated['gambar'] = basename($path);
 
         Destinasi::create($validated);
 
@@ -92,11 +98,25 @@ class DestinasiController extends Controller
         $validated = $request->validate([
             'nama'      => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'gambar'    => 'nullable|string|max:255',
-            'jam_buka'  => 'required',
-            'jam_tutup' => 'required',
+            // gambar tidak wajib diisi ulang saat update, hanya kalau mau ganti
+            'gambar'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'jam_buka'  => 'required|date_format:H:i',
+            'jam_tutup' => 'required|date_format:H:i|after:jam_buka',
             'lokasi'    => 'nullable|string|max:255',
         ]);
+
+        if ($request->hasFile('gambar')) {
+            // hapus gambar lama supaya storage tidak menumpuk file tak terpakai
+            if ($destinasi->gambar && Storage::disk('public')->exists('destinasi/' . $destinasi->gambar)) {
+                Storage::disk('public')->delete('destinasi/' . $destinasi->gambar);
+            }
+
+            $path = $request->file('gambar')->store('destinasi', 'public');
+            $validated['gambar'] = basename($path);
+        } else {
+            // tidak upload gambar baru -> pertahankan gambar lama
+            unset($validated['gambar']);
+        }
 
         $destinasi->update($validated);
 
@@ -111,6 +131,11 @@ class DestinasiController extends Controller
     public function destroy($id)
     {
         $destinasi = Destinasi::findOrFail($id);
+
+        if ($destinasi->gambar && Storage::disk('public')->exists('destinasi/' . $destinasi->gambar)) {
+            Storage::disk('public')->delete('destinasi/' . $destinasi->gambar);
+        }
+
         $destinasi->delete();
 
         return redirect()

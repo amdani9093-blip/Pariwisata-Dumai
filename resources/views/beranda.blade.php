@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('body-class', 'page-beranda')
 @section('title', 'Wisata Kota Dumai - Bumi Melayu Pesisir')
 
 @section('content')

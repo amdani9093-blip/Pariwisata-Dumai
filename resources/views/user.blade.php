@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('body-class', 'page-user-list')
 @section('title', 'Daftar User')
 
 @section('content')

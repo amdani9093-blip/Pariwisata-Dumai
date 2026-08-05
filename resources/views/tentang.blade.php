@@ -722,8 +722,8 @@
             <img src="{{ asset('images/kuliner.jpg') }}" alt="Kuliner Dumai" loading="lazy">
             <span class="gal-tag">Cita Rasa Pesisir</span>
         </a>
-        <a href="{{ asset('images/Pelabuhan Dumai.jpg') }}" target="_blank" rel="noopener" class="gallery-item">
-            <img src="{{ asset('images/Pelabuhan Dumai.jpg') }}" alt="Pelabuhan Dumai" loading="lazy">
+        <a href="{{ asset('images/port-dumai.jpg') }}" target="_blank" rel="noopener" class="gallery-item">
+            <img src="{{ asset('images/port-dumai.jpg') }}" alt="Pelabuhan Dumai" loading="lazy">
             <span class="gal-tag">Pelabuhan Dumai</span>
         </a>
         <a href="{{ asset('images/Pantai Dumai.jpg') }}" target="_blank" rel="noopener" class="gallery-item">

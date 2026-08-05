@@ -23,7 +23,10 @@
     @stack('styles')
 </head>
 
-<body>
+{{-- Class body diambil dari @section('body-class', '...') yang didefinisikan di tiap view.
+     Ini kunci dari perbaikannya: setiap halaman punya "namespace" CSS sendiri (page-beranda,
+     page-destinasi, dst) supaya style satu halaman tidak bisa menimpa style halaman lain. --}}
+<body class="@yield('body-class', '')">
 
     <!-- ================= NAVBAR ================= -->
 
@@ -50,33 +53,28 @@
                         </a>
                     </li>
 
-
                     <li>
                         <a href="{{ url('/destinasi') }}"
                             class="{{ Request::is('destinasi') ? 'active' : '' }}">
                             Destinasi
                         </a>
-
-
                     </li>
 
-                     <a href="{{ url('/tentang') }}"
+                    <li>
+                        <a href="{{ url('/tentang') }}"
                             class="{{ Request::is('tentang') ? 'active' : '' }}">
                             Tentang
                         </a>
                     </li>
 
-
-
                     <li>
                         <a href="{{ url('/kontak') }}"
-class="{{ Request::is('kontak') ? 'active' : '' }}">
+                            class="{{ Request::is('kontak') ? 'active' : '' }}">
                             Kontak
                         </a>
                     </li>
 
                 </ul>
-
 
                 <!-- Tombol Mobile -->
 
@@ -139,7 +137,6 @@ class="{{ Request::is('kontak') ? 'active' : '' }}">
                     <li><a href="/destinasi">Tentang</a></li>
 
                     <li><a href="/kuliner">Kuliner</a></li>
-
 
                 </ul>
 
