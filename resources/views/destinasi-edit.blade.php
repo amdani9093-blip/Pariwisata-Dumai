@@ -4,6 +4,9 @@
     - Setelah paham alurnya, silakan re-desain halaman ini sendiri (boleh dibantu AI)
     - Yang TIDAK BOLEH diubah: name="...", value="{{ $destinasi->... }}",
       @method('PUT'), dan action route
+    - Jam buka/tutup diganti dari <input type="time"> menjadi <select> dropdown
+      berisi pilihan waktu per 30 menit, supaya user tinggal pilih dari daftar,
+      tidak perlu klik jam & menit satu-satu di time picker bawaan browser.
 --}}
 
 @extends('layouts.app')
@@ -71,6 +74,21 @@
 
                         <div class="mb-3">
                             <label for="gambar" class="form-label">Nama File Gambar</label>
+
+                            {{-- Preview gambar yang sedang aktif, supaya kelihatan
+                                 file mana yang sedang dipakai sebelum diganti --}}
+                            @if(!empty($destinasi->gambar))
+                                <div class="mb-2">
+                                    <img
+                                        src="{{ asset('images/' . $destinasi->gambar) }}"
+                                        alt="Gambar saat ini: {{ $destinasi->nama }}"
+                                        class="rounded border"
+                                        style="width: 160px; height: 110px; object-fit: cover;"
+                                        onerror="this.onerror=null; this.replaceWith(Object.assign(document.createElement('div'), {className:'small text-danger border rounded p-2', innerText:'File \'{{ $destinasi->gambar }}\' tidak ditemukan di folder public/images.'}));"
+                                    >
+                                </div>
+                            @endif
+
                             <input
                                 type="text"
                                 class="form-control"
@@ -84,32 +102,78 @@
                             </div>
                         </div>
 
+                       
+                        @php
+                            $jamOptions = [];
+                            for ($h = 0; $h < 24; $h++) {
+                                foreach ([0, 30] as $m) {
+                                    $val = sprintf('%02d:%02d', $h, $m);
+                                    $jamOptions[] = $val;
+                                }
+                            }
+
+                            $jamBukaSelected  = old('jam_buka', $destinasi->jam_buka);
+                            $jamTutupSelected = old('jam_tutup', $destinasi->jam_tutup);
+
+                            // Format H:i:s dari database (mis. "08:00:00") disamakan jadi "08:00"
+                            // supaya cocok dengan value di <option>.
+                            if ($jamBukaSelected) {
+                                $jamBukaSelected = \Illuminate\Support\Str::of($jamBukaSelected)->substr(0, 5);
+                            }
+                            if ($jamTutupSelected) {
+                                $jamTutupSelected = \Illuminate\Support\Str::of($jamTutupSelected)->substr(0, 5);
+                            }
+                        @endphp
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="jam_buka" class="form-label">Jam Buka</label>
-                                <input
-                                    type="time"
-                                    class="form-control"
+                                <select
+                                    class="form-select"
                                     id="jam_buka"
                                     name="jam_buka"
-                                    value="{{ old('jam_buka', $destinasi->jam_buka) }}"
                                     required
                                 >
+                                    <option value="" disabled {{ !$jamBukaSelected ? 'selected' : '' }}>
+                                        Pilih jam buka
+                                    </option>
+                                    @foreach ($jamOptions as $jam)
+                                        <option
+                                            value="{{ $jam }}"
+                                            {{ (string) $jamBukaSelected === $jam ? 'selected' : '' }}
+                                        >
+                                            {{ $jam }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="jam_tutup" class="form-label">Jam Tutup</label>
-                                <input
-                                    type="time"
-                                    class="form-control"
+                                <select
+                                    class="form-select"
                                     id="jam_tutup"
                                     name="jam_tutup"
-                                    value="{{ old('jam_tutup', $destinasi->jam_tutup) }}"
                                     required
                                 >
+                                    <option value="" disabled {{ !$jamTutupSelected ? 'selected' : '' }}>
+                                        Pilih jam tutup
+                                    </option>
+                                    @foreach ($jamOptions as $jam)
+                                        <option
+                                            value="{{ $jam }}"
+                                            {{ (string) $jamTutupSelected === $jam ? 'selected' : '' }}
+                                        >
+                                            {{ $jam }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="form-text">
+                                    Jam tutup harus lebih besar dari jam buka.
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label for="lokasi" class="form-label">Lokasi</label>
                             <input
                                 type="text"
@@ -118,6 +182,24 @@
                                 name="lokasi"
                                 value="{{ old('lokasi', $destinasi->lokasi) }}"
                             >
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="harga_tiket" class="form-label">Harga Tiket</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="harga_tiket"
+                                    name="harga_tiket"
+                                    value="{{ old('harga_tiket', $destinasi->harga_tiket) }}"
+                                    min="0"
+                                >
+                            </div>
+                            <div class="form-text">
+                                Isi 0 kalau destinasi ini gratis.
+                            </div>
                         </div>
 
                         <div class="d-flex gap-2">

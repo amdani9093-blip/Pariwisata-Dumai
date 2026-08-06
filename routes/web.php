@@ -47,6 +47,7 @@ Route::get('/atraksi/{id}/edit', [AtraksiController::class, 'edit'])->name('atra
 Route::put('/atraksi/{id}', [AtraksiController::class, 'update'])->name('atraksi.update');
 Route::delete('/atraksi/{id}', [AtraksiController::class, 'destroy'])->name('atraksi.destroy');
 
+Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store');
 
 Route::get('/kontak', function () {
     return view('kontak');

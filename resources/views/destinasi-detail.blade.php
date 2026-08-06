@@ -7,6 +7,32 @@
     {{-- External Stylesheet --}}
     <link rel="stylesheet" href="{{ asset('css/destinasi-detail.css') }}">
 
+    {{-- Style kecil khusus warna harga tiket & tombol edit, tidak menimpa
+         class apa pun dari destinasi-detail.css --}}
+    <style>
+        .price-tag {
+            display: inline-flex;
+            align-items: center;
+            font-weight: 700;
+            color: #f4a300;
+        }
+        .price-tag.gratis {
+            color: #28a745;
+        }
+
+        .action-btn.btn-edit {
+            color: #fff;
+            background: linear-gradient(135deg, #f4a300, #ffb52e);
+        }
+        .action-btn.btn-edit:hover {
+            color: #212529;
+            box-shadow: 0 8px 20px rgba(244,163,0,.35);
+        }
+        .action-btn.btn-edit:hover i {
+            transform: rotate(-8deg);
+        }
+    </style>
+
     <div class="container py-5">
 
         {{-- ===================== BREADCRUMB ===================== --}}
@@ -58,6 +84,15 @@
                             <strong>Lokasi:</strong> {{ $destinasi->lokasi }}
                         </span>
                     </li>
+                    <li class="list-group-item">
+                        <span class="info-icon"><i class="bi bi-ticket-perforated"></i></span>
+                        <span>
+                            <strong>Harga Tiket:</strong>
+                            <span class="price-tag {{ $destinasi->harga_tiket == 0 ? 'gratis' : '' }}">
+                                {{ $destinasi->harga_tiket == 0 ? 'Gratis' : 'Rp ' . number_format($destinasi->harga_tiket, 0, ',', '.') }}
+                            </span>
+                        </span>
+                    </li>
                 </ul>
 
                 <div class="d-flex flex-wrap gap-2 align-items-center">
@@ -67,6 +102,10 @@
 
                     <a href="{{ route('beranda') }}#kontak" class="action-btn btn-contact">
                         <i class="bi bi-chat-dots"></i> Hubungi Kami
+                    </a>
+
+                    <a href="{{ route('destinasi.edit', $destinasi->id) }}" class="action-btn btn-edit">
+                        <i class="bi bi-pencil-square"></i> Edit
                     </a>
 
                     <form action="{{ route('destinasi.destroy', $destinasi->id) }}"
@@ -92,6 +131,7 @@
                 <div class="facility-box">
                     <i class="bi bi-p-circle"></i>
                     Area Parkir
+                    
                 </div>
             </div>
             <div class="col">

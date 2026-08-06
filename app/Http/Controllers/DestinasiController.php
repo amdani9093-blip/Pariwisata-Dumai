@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Destinasi;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class DestinasiController extends Controller
 {
@@ -54,22 +53,22 @@ class DestinasiController extends Controller
 
     /**
      * Menyimpan destinasi baru ke database.
+     *
+     * Catatan: field "gambar" di form adalah NAMA FILE (teks), bukan file upload.
+     * File gambar aslinya harus sudah ditaruh manual di folder public/images/.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama'      => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-            'gambar'    => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'jam_buka'  => 'required|date_format:H:i',
-            'jam_tutup' => 'required|date_format:H:i|after:jam_buka',
-            'lokasi'    => 'nullable|string|max:255',
+            'nama'        => 'required|string|max:255',
+            'deskripsi'   => 'required|string',
+            'gambar'      => 'required|string|max:255',
+            'jam_buka'    => 'required|date_format:H:i',
+            'jam_tutup'   => 'required|date_format:H:i|after:jam_buka',
+            'lokasi'      => 'required|string|max:255',
+            'harga_tiket' => 'required|integer|min:0',
+        
         ]);
-
-        // simpan file gambar ke storage/app/public/destinasi,
-        // simpan hanya nama filenya ke database
-        $path = $request->file('gambar')->store('destinasi', 'public');
-        $validated['gambar'] = basename($path);
 
         Destinasi::create($validated);
 
@@ -90,33 +89,23 @@ class DestinasiController extends Controller
 
     /**
      * Memperbarui data destinasi yang sudah ada.
+     *
+     * Catatan: field "gambar" di form adalah NAMA FILE (teks) yang merujuk
+     * ke file yang sudah ada di folder public/images/, bukan file upload.
      */
     public function update(Request $request, $id)
     {
         $destinasi = Destinasi::findOrFail($id);
 
         $validated = $request->validate([
-            'nama'      => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-            // gambar tidak wajib diisi ulang saat update, hanya kalau mau ganti
-            'gambar'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'jam_buka'  => 'required|date_format:H:i',
-            'jam_tutup' => 'required|date_format:H:i|after:jam_buka',
-            'lokasi'    => 'nullable|string|max:255',
+            'nama'        => 'required|string|max:255',
+            'deskripsi'   => 'required|string',
+            'gambar'      => 'required|string|max:255',
+            'jam_buka'    => 'required|date_format:H:i',
+            'jam_tutup'   => 'required|date_format:H:i|after:jam_buka',
+            'lokasi'      => 'required|string|max:255',
+            'harga_tiket' => 'required|integer|min:0',
         ]);
-
-        if ($request->hasFile('gambar')) {
-            // hapus gambar lama supaya storage tidak menumpuk file tak terpakai
-            if ($destinasi->gambar && Storage::disk('public')->exists('destinasi/' . $destinasi->gambar)) {
-                Storage::disk('public')->delete('destinasi/' . $destinasi->gambar);
-            }
-
-            $path = $request->file('gambar')->store('destinasi', 'public');
-            $validated['gambar'] = basename($path);
-        } else {
-            // tidak upload gambar baru -> pertahankan gambar lama
-            unset($validated['gambar']);
-        }
 
         $destinasi->update($validated);
 
@@ -131,10 +120,6 @@ class DestinasiController extends Controller
     public function destroy($id)
     {
         $destinasi = Destinasi::findOrFail($id);
-
-        if ($destinasi->gambar && Storage::disk('public')->exists('destinasi/' . $destinasi->gambar)) {
-            Storage::disk('public')->delete('destinasi/' . $destinasi->gambar);
-        }
 
         $destinasi->delete();
 

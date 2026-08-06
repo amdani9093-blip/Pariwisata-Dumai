@@ -21,6 +21,11 @@
         rel="stylesheet">
 
     @stack('styles')
+
+    {{-- Catatan: style logo navbar SUDAH dipindahkan ke public/css/style.css
+         (cari komentar "LOGO NAVBAR"). Jangan tambahkan <style> inline lagi
+         di sini untuk .navbar-logo-img, supaya tidak tabrakan/override
+         dengan style.css lagi. --}}
 </head>
 
 {{-- Class body diambil dari @section('body-class', '...') yang didefinisikan di tiap view.
@@ -38,9 +43,11 @@
 
                 <a href="{{ url('/') }}" class="logo">
 
-                    <i class="fa-solid fa-umbrella-beach"></i>
-
-                    Visit Dumai
+                    <img
+                        src="{{ asset('images/logo.png') }}"
+                        alt="Visit Dumai - Kota Idaman"
+                        class="navbar-logo-img"
+                    >
 
                 </a>
 
@@ -136,7 +143,7 @@
 
                     <li><a href="/destinasi">Tentang</a></li>
 
-                    <li><a href="/kuliner">Kuliner</a></li>
+               
 
                 </ul>
 

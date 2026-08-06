@@ -270,6 +270,12 @@
                                 >
                             </div>
                         </div>
+                        /*daftar harga tiket*/
+                    <div class="mb-4">
+                        <label class="form-label">Harga Tiket (Rp)</label>
+                        <input type="number" name="harga_tiket" class="form-control"
+                            placeholder="contoh: 10000" min="0">
+                            </div>
 
                         <hr class="my-4">
 

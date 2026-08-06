@@ -49,20 +49,66 @@
 <!-- ================= TAMPILAN KATALOG & KALKULATOR RUTE ================= -->
 <div class="container pb-5">
 
-    <!-- Filter Menu Ringkas -->
-    <div class="filter-menu-wrapper mb-4">
-        <div class="filter-menu">
-            <button class="filter-btn active" onclick="filterSelection('all', this)"><i class="fas fa-border-all me-1"></i> Semua</button>
+    <<!-- ================= FILTER DESTINASI ================= -->
+<div class="filter-toolbar shadow-sm rounded-4 p-4 mb-5">
+
+    <div class="row align-items-center">
+
+        <!-- Judul -->
+        <div class="col-lg-4 mb-3 mb-lg-0">
+            <h4 class="fw-bold mb-1">
+                <i class="fas fa-map-marked-alt text-warning me-2"></i>
+                Jelajahi Destinasi Unggulan
+            </h4>
+
+            <small class="text-muted">
+                Temukan destinasi wisata terbaik di Kota Dumai
+            </small>
         </div>
-        <div class="text-center mt-2">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="onlyOpenCheck" onchange="toggleOnlyOpen(this)">
-                <label class="form-check-label small fw-semibold text-muted" for="onlyOpenCheck">
-                    <i class="fas fa-door-open text-success me-1"></i> Tampilkan hanya yang sedang buka
-                </label>
+
+        <!-- Filter -->
+        <div class="col-lg-5">
+
+            <div class="filter-menu">
+
+                <button class="filter-btn active"
+                        onclick="filterSelection('all', this)">
+                    <i class="fas fa-border-all"></i>
+                    Semua
+                
+
             </div>
+
         </div>
+
+        <!-- Status -->
+        <div class="col-lg-3">
+
+            <div class="only-open-box">
+
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="onlyOpenCheck"
+                    onchange="toggleOnlyOpen(this)">
+
+                <label
+                    class="form-check-label"
+                    for="onlyOpenCheck">
+
+                    <i class="fas fa-door-open text-success me-2"></i>
+
+                    Sedang Buka
+
+                </label>
+
+            </div>
+
+        </div>
+
     </div>
+
+</div>
 
     <!-- Grid Destinasi Wisata -->
     <div class="card-grid mb-5" id="destinasiGrid">

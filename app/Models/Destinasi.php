@@ -17,6 +17,7 @@ protected $fillable = [
     'jam_buka', 
     'jam_tutup', 
     'lokasi',
+    'harga_tiket'
 ];
 
 
