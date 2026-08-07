@@ -7,8 +7,8 @@
     {{-- External Stylesheet --}}
     <link rel="stylesheet" href="{{ asset('css/destinasi-detail.css') }}">
 
-    {{-- Style kecil khusus warna harga tiket & tombol edit, tidak menimpa
-         class apa pun dari destinasi-detail.css --}}
+    {{-- Style kecil khusus warna harga tiket, tombol edit, dan kartu atraksi.
+         Tidak menimpa class apa pun dari destinasi-detail.css --}}
     <style>
         .price-tag {
             display: inline-flex;
@@ -30,6 +30,91 @@
         }
         .action-btn.btn-edit:hover i {
             transform: rotate(-8deg);
+        }
+
+        /* ===== Section Atraksi ===== */
+        .detail-atraksi .section-title {
+            position: relative;
+            padding-bottom: .5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        .detail-atraksi .section-title::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 48px;
+            height: 3px;
+            border-radius: 3px;
+            background: linear-gradient(135deg, #f4a300, #ffb52e);
+        }
+
+        .atraksi-card {
+            border: none;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,.06);
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+        .atraksi-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0,0,0,.12);
+        }
+
+        .atraksi-card .atraksi-img-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            background: #f1f1f1;
+        }
+        .atraksi-card .atraksi-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .4s ease;
+        }
+        .atraksi-card:hover .atraksi-img-wrap img {
+            transform: scale(1.08);
+        }
+
+        .atraksi-card .card-body {
+            padding: 1rem 1.1rem 1.2rem;
+        }
+        .atraksi-card .card-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: .5rem;
+            color: #212529;
+        }
+        .atraksi-card .badge-kategori {
+            display: inline-block;
+            padding: .35em .75em;
+            font-size: .75rem;
+            font-weight: 500;
+            border-radius: 50px;
+            background: #fff4e0;
+            color: #b5760a;
+        }
+
+        .atraksi-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            padding: 2.5rem 1rem;
+            width: 100%;
+            border: 1px dashed #dee2e6;
+            border-radius: 14px;
+            color: #6c757d;
+            background: #fafafa;
+        }
+        .atraksi-empty i {
+            font-size: 1.75rem;
+            color: #adb5bd;
         }
     </style>
 
@@ -131,7 +216,6 @@
                 <div class="facility-box">
                     <i class="bi bi-p-circle"></i>
                     Area Parkir
-                    
                 </div>
             </div>
             <div class="col">
@@ -155,6 +239,34 @@
         </div>
 
         <hr class="my-5">
+
+        {{-- ===================== ATRAKSI ===================== --}}
+        <div class="detail-atraksi">
+            <h2 class="section-title">Atraksi di Destinasi Ini</h2>
+
+            <div class="row g-4">
+                @forelse ($destinasi->atraksi as $atraksi)
+                    <div class="col-6 col-md-4">
+                        <div class="atraksi-card card h-100">
+                            <div class="atraksi-img-wrap">
+                                <img src="{{ asset('images/' . $atraksi->gambar) }}"
+                                     alt="{{ $atraksi->nama }}"
+                                     loading="lazy">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">{{ $atraksi->nama }}</h6>
+                                <span class="badge-kategori">{{ $atraksi->kategori }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="atraksi-empty">
+                        <i class="bi bi-emoji-frown"></i>
+                        <span>Belum ada atraksi untuk destinasi ini.</span>
+                    </div>
+                @endforelse
+            </div>
+        </div>
 
     </div>
 

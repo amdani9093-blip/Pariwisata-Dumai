@@ -20,5 +20,10 @@ protected $fillable = [
     'harga_tiket'
 ];
 
+public function atraksi()
+{
+    return $this->hasMany(Atraksi::class);
+}
+
 
 }
