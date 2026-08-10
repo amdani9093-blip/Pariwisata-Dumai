@@ -38,8 +38,7 @@ class DestinasiController extends Controller
      */
     public function show($id)
     {
-    $destinasi = Destinasi::with('atraksi')->findOrFail($id);    
-    $destinasi = Destinasi::findOrFail($id);
+    $destinasi = Destinasi::with(['atraksi', 'ulasan.user'])->findOrFail($id);
 
         return view('destinasi-detail', compact('destinasi'));
     }
@@ -63,19 +62,19 @@ class DestinasiController extends Controller
         $validated = $request->validate([
             'nama'        => 'required|string|max:255',
             'deskripsi'   => 'required|string',
-            'gambar'      => 'required|string|max:255',
+            'gambar' => 'required|image|max:15000',
             'jam_buka'    => 'required|date_format:H:i',
             'jam_tutup'   => 'required|date_format:H:i|after:jam_buka',
             'lokasi'      => 'required|string|max:255',
             'harga_tiket' => 'required|integer|min:0',
         
         ]);
-
-        Destinasi::create($validated);
+$validated['gambar'] = $request->file('gambar')->store('destinasi', 'public');
+Destinasi::create($validated);
 
         return redirect()
             ->route('destinasi')
-            ->with('success', 'Destinasi berhasil ditambahkan.');
+            ->with('success', 'Destinasi berhasil ditambahkan!');
     }
 
     /**
@@ -101,17 +100,28 @@ class DestinasiController extends Controller
         $validated = $request->validate([
             'nama'        => 'required|string|max:255',
             'deskripsi'   => 'required|string',
-            'gambar'      => 'required|string|max:255',
+            'gambar' => 'nullable|image|max:15000',
             'jam_buka'    => 'required|date_format:H:i',
             'jam_tutup'   => 'required|date_format:H:i|after:jam_buka',
             'lokasi'      => 'required|string|max:255',
             'harga_tiket' => 'required|integer|min:0',
         ]);
 
-        $destinasi->update($validated);
+        $validated = $request->validate([
+    'gambar' => 'nullable|image|max:15000',
+    // ...rules lain
+]);
+ 
+if ($request->hasFile('gambar')) {
+    $validated['gambar'] = $request->file('gambar')->store('destinasi', 'public');
+} else {
+    unset($validated['gambar']);
+}
+ 
+$destinasi->update($validated);
 
         return redirect()
-            ->route('destinasi.detail', $destinasi->id)
+            ->route('destinasi')
             ->with('success', 'Destinasi berhasil diperbarui!');
     }
 

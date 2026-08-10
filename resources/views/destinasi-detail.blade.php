@@ -6,120 +6,14 @@
 
     {{-- External Stylesheet --}}
     <link rel="stylesheet" href="{{ asset('css/destinasi-detail.css') }}">
-
-    {{-- Style kecil khusus warna harga tiket, tombol edit, dan kartu atraksi.
-         Tidak menimpa class apa pun dari destinasi-detail.css --}}
-    <style>
-        .price-tag {
-            display: inline-flex;
-            align-items: center;
-            font-weight: 700;
-            color: #f4a300;
-        }
-        .price-tag.gratis {
-            color: #28a745;
-        }
-
-        .action-btn.btn-edit {
-            color: #fff;
-            background: linear-gradient(135deg, #f4a300, #ffb52e);
-        }
-        .action-btn.btn-edit:hover {
-            color: #212529;
-            box-shadow: 0 8px 20px rgba(244,163,0,.35);
-        }
-        .action-btn.btn-edit:hover i {
-            transform: rotate(-8deg);
-        }
-
-        /* ===== Section Atraksi ===== */
-        .detail-atraksi .section-title {
-            position: relative;
-            padding-bottom: .5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-        }
-        .detail-atraksi .section-title::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 48px;
-            height: 3px;
-            border-radius: 3px;
-            background: linear-gradient(135deg, #f4a300, #ffb52e);
-        }
-
-        .atraksi-card {
-            border: none;
-            border-radius: 14px;
-            overflow: hidden;
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,.06);
-            transition: transform .25s ease, box-shadow .25s ease;
-        }
-        .atraksi-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 24px rgba(0,0,0,.12);
-        }
-
-        .atraksi-card .atraksi-img-wrap {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 4 / 3;
-            overflow: hidden;
-            background: #f1f1f1;
-        }
-        .atraksi-card .atraksi-img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform .4s ease;
-        }
-        .atraksi-card:hover .atraksi-img-wrap img {
-            transform: scale(1.08);
-        }
-
-        .atraksi-card .card-body {
-            padding: 1rem 1.1rem 1.2rem;
-        }
-        .atraksi-card .card-title {
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: .5rem;
-            color: #212529;
-        }
-        .atraksi-card .badge-kategori {
-            display: inline-block;
-            padding: .35em .75em;
-            font-size: .75rem;
-            font-weight: 500;
-            border-radius: 50px;
-            background: #fff4e0;
-            color: #b5760a;
-        }
-
-        .atraksi-empty {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: .5rem;
-            padding: 2.5rem 1rem;
-            width: 100%;
-            border: 1px dashed #dee2e6;
-            border-radius: 14px;
-            color: #6c757d;
-            background: #fafafa;
-        }
-        .atraksi-empty i {
-            font-size: 1.75rem;
-            color: #adb5bd;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/destinasi-detail-tambahan.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
 
     <div class="container py-5">
 
+
+        
         {{-- ===================== BREADCRUMB ===================== --}}
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb">
@@ -135,6 +29,8 @@
             </ol>
         </nav>
 
+
+
         {{-- ===================== KONTEN UTAMA ===================== --}}
         <div class="row g-4">
 
@@ -144,12 +40,13 @@
                     <span class="badge-status">
                         <span class="dot"></span>Sedang Buka
                     </span>
-                    <img src="{{ asset('images/' . $destinasi->gambar) }}"
+                    <img src="{{ asset('storage/' . $destinasi->gambar) }}"
                          alt="{{ $destinasi->nama }}">
                 </div>
             </div>
 
-            {{-- Informasi destinasi --}}
+
+            {{-- Pengaturan Informasi destinasi --}}
             <div class="col-md-6">
                 <h1 class="mb-3">{{ $destinasi->nama }}</h1>
 
@@ -209,7 +106,9 @@
 
         <hr class="my-5">
 
-        {{-- ===================== FASILITAS ===================== --}}
+        
+
+        {{-- ===================== PENGATURAN FASILITAS ===================== --}}
         <h5 class="mb-3">Fasilitas Tersedia</h5>
         <div class="row row-cols-2 row-cols-md-4 g-3">
             <div class="col">
@@ -240,7 +139,73 @@
 
         <hr class="my-5">
 
-        {{-- ===================== ATRAKSI ===================== --}}
+        {{-- ===================== PENGATURAN ULASAN (gaya testimoni elegan) ===================== --}}
+        <div class="detail-ulasan mb-5">
+            <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+                <div>
+                    <span class="ulasan-elegant-eyebrow">&#9670; Kata Pengunjung</span>
+                    <h2 class="ulasan-elegant-title">Ulasan Pengunjung</h2>
+                </div>
+
+                @if ($destinasi->ulasan->count() > 0)
+                    @php
+                        $rataRating = $destinasi->ulasan->avg('rating');
+                        $totalUlasan = $destinasi->ulasan->count();
+                    @endphp
+                    <div class="ulasan-summary">
+                        <span class="ulasan-summary-score">{{ number_format($rataRating, 1) }}</span>
+                        <div class="ulasan-summary-meta">
+                            <div class="ulasan-summary-stars">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <i class="bi {{ $i <= round($rataRating) ? 'bi-star-fill' : 'bi-star' }}"></i>
+                                @endfor
+                            </div>
+                            <small>{{ $totalUlasan }} ulasan</small>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            @forelse ($destinasi->ulasan as $ulasan)
+                <div class="ulasan-elegant-card">
+                    <div class="ulasan-elegant-photo">
+                        @if (!empty($ulasan->foto))
+                            <img src="{{ asset('images/' . $ulasan->foto) }}" alt="{{ $ulasan->user->name }}">
+                        @elseif (!empty($ulasan->user->foto))
+                            <img src="{{ asset('images/' . $ulasan->user->foto) }}" alt="{{ $ulasan->user->name }}">
+                        @else
+                            {{ strtoupper(substr($ulasan->user->name, 0, 1)) }}
+                        @endif
+                    </div>
+                    <div class="ulasan-elegant-content">
+                        <div class="ulasan-elegant-name">{{ $ulasan->user->name }}</div>
+                        <div class="ulasan-elegant-stars">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <i class="bi {{ $i <= $ulasan->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
+                            @endfor
+                        </div>
+                        <p class="ulasan-elegant-quote">{{ $ulasan->komentar }}</p>
+                        @if (!empty($ulasan->created_at))
+                            <span class="ulasan-elegant-date">{{ $ulasan->created_at->format('d M Y') }}</span>
+                        @endif
+                        <span class="ulasan-elegant-mark">&rdquo;</span>
+                    </div>
+                </div>
+            @empty
+                <div class="ulasan-empty">
+                    <i class="bi bi-chat-square-heart"></i>
+                    <span>Belum ada ulasan untuk destinasi ini. Jadilah yang pertama berbagi pengalaman!</span>
+                </div>
+            @endforelse
+
+            <a href="{{ route('ulasan.create', $destinasi->id) }}" class="action-btn btn-tulis-ulasan mt-3">
+                <i class="bi bi-pencil-square"></i> Tulis Ulasan
+            </a>
+        </div>
+
+        <hr class="my-5">
+
+        {{-- ===================== PENGATURAN ATRAKSI ===================== --}}
         <div class="detail-atraksi">
             <h2 class="section-title">Atraksi di Destinasi Ini</h2>
 
@@ -270,4 +235,6 @@
 
     </div>
 
+
+    
 @endsection

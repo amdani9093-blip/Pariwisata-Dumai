@@ -1044,6 +1044,7 @@ button.btn-primary{
    5. PAGE: KONTAK (.page-kontak)
    ========================================================== */
 
+
 .page-kontak{
     --ocean-deep:        #052E3E;
     --ocean:             #0B4F6C;
@@ -1883,6 +1884,592 @@ margin-top:20px;
 
 }
 
+/* ===================================================================
+   destinasi-detail-tambahan.css
+   Style tambahan khusus halaman detail destinasi: harga tiket, tombol
+   edit, kartu atraksi, dan section ulasan (gaya testimoni elegan).
+   Tidak menimpa class apa pun dari destinasi-detail.css.
+   =================================================================== */
 
+.price-tag {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 700;
+    color: #4d3301;
+}
+.price-tag.gratis {
+    color: #28a745;
+}
 
+.action-btn.btn-edit {
+    color: #fff;
+    background: linear-gradient(135deg, #f4a300, #ffb52e);
+}
+.action-btn.btn-edit:hover {
+    color: #212529;
+    box-shadow: 0 8px 20px rgba(244,163,0,.35);
+}
+.action-btn.btn-edit:hover i {
+    transform: rotate(-8deg);
+}
 
+/* ===== Section Atraksi ===== */
+.detail-atraksi .section-title {
+    position: relative;
+    padding-bottom: .5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+.detail-atraksi .section-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 48px;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(135deg, #f4a300, #ffb52e);
+}
+
+.atraksi-card {
+    border: none;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+.atraksi-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0,0,0,.12);
+}
+
+.atraksi-card .atraksi-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #f1f1f1;
+}
+.atraksi-card .atraksi-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s ease;
+}
+.atraksi-card:hover .atraksi-img-wrap img {
+    transform: scale(1.08);
+}
+
+.atraksi-card .card-body {
+    padding: 1rem 1.1rem 1.2rem;
+}
+.atraksi-card .card-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: .5rem;
+    color: #212529;
+}
+.atraksi-card .badge-kategori {
+    display: inline-block;
+    padding: .35em .75em;
+    font-size: .75rem;
+    font-weight: 500;
+    border-radius: 50px;
+    background: #fff4e0;
+    color: #b5760a;
+}
+
+.atraksi-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: 2.5rem 1rem;
+    width: 100%;
+    border: 1px dashed #dee2e6;
+    border-radius: 14px;
+    color: #6c757d;
+    background: #fafafa;
+}
+.atraksi-empty i {
+    font-size: 1.75rem;
+    color: #adb5bd;
+}
+
+/* ===== Section Ulasan (gaya testimoni elegan) ===== */
+.ulasan-elegant-eyebrow {
+    display: inline-block;
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #b5760a;
+    margin-bottom: .35rem;
+}
+
+.ulasan-elegant-title {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 2.1rem;
+    color: #212529;
+    margin-bottom: 0;
+}
+
+.ulasan-summary {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    padding: .6rem 1.15rem;
+    border-radius: 14px;
+    background: #fff4e0;
+}
+.ulasan-summary-score {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #b5760a;
+    line-height: 1;
+}
+.ulasan-summary-meta {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+}
+.ulasan-summary-stars i {
+    color: #f4a300;
+    font-size: .85rem;
+}
+.ulasan-summary-meta small {
+    color: #6c757d;
+    font-size: .78rem;
+}
+
+.ulasan-elegant-card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 2.25rem;
+    padding-left: 34px;
+}
+.ulasan-elegant-card:last-of-type {
+    margin-bottom: 1rem;
+}
+
+.ulasan-elegant-photo {
+    flex-shrink: 0;
+    width: 84px;
+    height: 84px;
+    margin-top: 24px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    background: linear-gradient(135deg, #f4a300, #ffb52e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.7rem;
+    font-family: 'Playfair Display', serif;
+    z-index: 2;
+    overflow: hidden;
+}
+.ulasan-elegant-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ulasan-elegant-content {
+    flex: 1;
+    min-width: 0;
+    margin-left: -34px;
+    padding: 1.75rem 1.75rem 1.5rem 4.75rem;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 28px rgba(0,0,0,.07);
+    position: relative;
+}
+
+.ulasan-elegant-name {
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    font-size: .92rem;
+    margin-bottom: .35rem;
+    color: #212529;
+}
+
+.ulasan-elegant-stars {
+    color: #f4a300;
+    font-size: .9rem;
+    margin-bottom: .9rem;
+    letter-spacing: 2px;
+}
+
+.ulasan-elegant-quote {
+    font-size: .95rem;
+    line-height: 1.7;
+    color: #495057;
+    margin: 0;
+    padding-right: 2rem;
+}
+
+.ulasan-elegant-date {
+    display: block;
+    font-size: .74rem;
+    color: #adb5bd;
+    margin-top: .6rem;
+}
+
+.ulasan-elegant-mark {
+    position: absolute;
+    right: 1.4rem;
+    bottom: .6rem;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 3.2rem;
+    line-height: 1;
+    color: #f4a300;
+    opacity: .3;
+    pointer-events: none;
+}
+
+@media (max-width: 576px) {
+    .ulasan-elegant-card {
+        padding-left: 0;
+    }
+    .ulasan-elegant-photo {
+        width: 64px;
+        height: 64px;
+        font-size: 1.3rem;
+        margin-top: 20px;
+    }
+    .ulasan-elegant-content {
+        margin-left: -22px;
+        padding: 1.4rem 1.2rem 1.2rem 3.2rem;
+    }
+    .ulasan-elegant-mark {
+        font-size: 2.2rem;
+    }
+}
+
+.ulasan-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: 2.5rem 1rem;
+    border: 1px dashed #dee2e6;
+    border-radius: 14px;
+    color: #6c757d;
+    background: #fafafa;
+    text-align: center;
+}
+.ulasan-empty i {
+    font-size: 1.75rem;
+    color: #adb5bd;
+}
+
+.action-btn.btn-tulis-ulasan {
+    color: #fff;
+    background: linear-gradient(135deg, #f4a300, #ffb52e);
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+}
+.action-btn.btn-tulis-ulasan:hover {
+    color: #212529;
+    box-shadow: 0 8px 20px rgba(244,163,0,.35);
+}
+
+/* ===================================================================
+   destinasi-edit.css
+   Style untuk halaman Edit Destinasi.
+   =================================================================== */
+
+.edit-destinasi-card {
+    border: none;
+    border-radius: 1.25rem;
+    overflow: hidden;
+}
+
+.edit-destinasi-header {
+    background: linear-gradient(135deg, #0a5c8a, #17a2b8);
+    color: #fff;
+    padding: 2rem 2rem 1.5rem;
+}
+.edit-destinasi-header .icon-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: .75rem;
+}
+
+.edit-destinasi-body {
+    padding: 2rem;
+}
+
+.edit-destinasi-body .form-label {
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+.edit-destinasi-body .form-control,
+.edit-destinasi-body .form-select {
+    border-color: #dfe6ea;
+    padding: .6rem .9rem;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+.edit-destinasi-body .form-control:focus,
+.edit-destinasi-body .form-select:focus {
+    border-color: #17a2b8;
+    box-shadow: 0 0 0 .2rem rgba(23,162,184,.15);
+}
+
+.form-section-label {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    font-weight: 700;
+    font-size: .82rem;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    color: #0a5c8a;
+    margin-bottom: 1rem;
+}
+.form-section-label:not(:first-child) {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed #e9ecef;
+}
+
+/* ===== Preview gambar interaktif ===== */
+.gambar-edit-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.1rem;
+    flex-wrap: wrap;
+}
+
+.gambar-preview-box {
+    position: relative;
+    flex-shrink: 0;
+    width: 170px;
+    height: 120px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #f1f1f1;
+    box-shadow: 0 4px 14px rgba(0,0,0,.1);
+}
+.gambar-preview-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.gambar-preview-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .3rem;
+    background: rgba(10,92,138,.6);
+    color: #fff;
+    font-size: .76rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity .2s ease;
+    pointer-events: none;
+}
+.gambar-preview-box:hover .gambar-preview-overlay {
+    opacity: 1;
+}
+.gambar-preview-box.no-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+    font-size: 1.8rem;
+    border: 1px dashed #dee2e6;
+}
+
+.gambar-upload-col {
+    flex: 1;
+    min-width: 200px;
+}
+.gambar-upload-hint {
+    font-size: .78rem;
+    color: #6c757d;
+    margin-top: .4rem;
+}
+.gambar-upload-error {
+    font-size: .78rem;
+    color: #dc3545;
+    margin-top: .4rem;
+}
+
+/* ===== Harga tiket ===== */
+.harga-input-group .input-group-text {
+    background: #fff4e0;
+    color: #b5760a;
+    font-weight: 700;
+    border-color: #dfe6ea;
+}
+
+/* ===== Tombol aksi ===== */
+.btn-submit-destinasi {
+    background: linear-gradient(135deg, #0a5c8a, #17a2b8);
+    border: none;
+    color: #fff;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+.btn-submit-destinasi:hover {
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(10,92,138,.25);
+}
+
+.btn-cancel-destinasi {
+    border-color: #dfe6ea;
+    color: #495057;
+    transition: background .2s ease, border-color .2s ease;
+}
+.btn-cancel-destinasi:hover {
+    background: #f8f9fa;
+    border-color: #ced4da;
+    color: #212529;
+}
+
+/* ===== Section Atraksi (Edit Destinasi) ===== */
+<style>
+    :root {
+        --sea-green: #0d9488;
+        --sea-green-dark: #0f766e;
+        --sky-blue: #38bdf8;
+        --sky-blue-dark: #0ea5e9;
+    }
+
+    .form-page-header {
+        background: linear-gradient(135deg, var(--sea-green) 0%, var(--sky-blue) 100%);
+        border-radius: 18px;
+        padding: 40px 35px;
+        color: #fff;
+        margin-bottom: -60px;
+        position: relative;
+        z-index: 1;
+    }
+    .form-page-header h2 { font-weight: 700; margin-bottom: 4px; }
+    .form-page-header p { opacity: .9; margin-bottom: 0; }
+
+    .form-card {
+        position: relative;
+        z-index: 2;
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 10px 35px rgba(13,148,136,.12);
+    }
+
+    .form-section-label {
+        font-size: .8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: var(--sea-green-dark);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form-section-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e9ecef;
+    }
+
+    .form-label { font-weight: 600; color: #343a40; }
+
+    .input-group-text {
+        background: #eefbfa;
+        border-right: none;
+        color: var(--sea-green-dark);
+    }
+    .form-control, .form-select {
+        border-left: none;
+    }
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 .2rem rgba(56,189,248,.2);
+        border-color: var(--sky-blue-dark);
+    }
+    .input-group:focus-within .input-group-text {
+        border-color: var(--sky-blue-dark);
+        color: var(--sea-green-dark);
+    }
+    textarea.form-control { border-left: 1px solid #ced4da; }
+
+    .form-text { font-size: .8rem; }
+
+    .btn-save {
+        background: linear-gradient(135deg, var(--sea-green) 0%, var(--sky-blue-dark) 100%);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 28px;
+        border-radius: 10px;
+        transition: opacity .2s ease, box-shadow .2s ease;
+    }
+    .btn-save:hover {
+        opacity: .95;
+        color: #fff;
+        box-shadow: 0 8px 20px rgba(13,148,136,.35);
+    }
+
+    .btn-cancel {
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 24px;
+    }
+
+    /* ===== Kotak info penghapusan ===== */
+    .delete-info-box {
+        background: #f0fdfa;
+        border: 1px dashed var(--sea-green);
+        border-radius: 14px;
+        padding: 18px 20px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        margin-top: 28px;
+    }
+    .delete-info-box .info-icon {
+        width: 40px; height: 40px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--sea-green), var(--sky-blue));
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+    .delete-info-box h6 {
+        font-weight: 700;
+        color: var(--sea-green-dark);
+        margin-bottom: 4px;
+    }
+    .delete-info-box p {
+        color: #495057;
+        font-size: .87rem;
+        margin-bottom: 0;
+        line-height: 1.6;
+    }
+</style>

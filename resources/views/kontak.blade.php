@@ -7,9 +7,82 @@
 <!-- External Stylesheet -->
 <link rel="stylesheet" href="{{ asset('css/kontak.css') }}">
 
-{{-- Style kecil khusus ikon kartu kontak, tidak menimpa class apa pun
-     dari kontak.css --}}
+{{-- Bootstrap Icons dibutuhkan karena halaman ini memakai class "bi bi-*".
+     Kalau layouts.app Anda SUDAH memuat Bootstrap Icons, baris ini boleh dihapus. --}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+{{-- Semua style khusus halaman kontak digabung di satu blok
+     supaya tidak ada aturan yang saling menimpa --}}
 <style>
+    /* ===================== HERO ===================== */
+    .contact-hero {
+        position: relative;
+        min-height: 340px;
+        display: flex;
+        align-items: center;
+        background-image:
+            linear-gradient(135deg, rgba(10,92,138,.85), rgba(23,162,184,.80)),
+            url('{{ asset("images/hero-kontak.jpg") }}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: #fff;
+        overflow: hidden;
+    }
+
+    /* motif Melayu tipis di atas overlay */
+    .contact-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url('{{ asset("images/motif-melayu.svg") }}');
+        background-repeat: repeat;
+        background-size: 220px;
+        opacity: .10;
+        pointer-events: none;
+    }
+
+    /* wave divider halus di bagian bawah hero */
+    .contact-hero .hero-wave {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        line-height: 0;
+        pointer-events: none;
+    }
+    .contact-hero .hero-wave svg {
+        width: 100%;
+        height: 60px;
+        display: block;
+    }
+
+    .contact-hero .container {
+        position: relative;
+        z-index: 1;
+        animation: heroFadeUp .7s ease both;
+    }
+
+    @keyframes heroFadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .contact-hero .badge.bg-white {
+        background: rgba(255,255,255,.92) !important;
+        letter-spacing: 1px;
+    }
+
+    .contact-hero .lead {
+        color: rgba(255,255,255,.9) !important;
+    }
+
+    .contact-hero h1 {
+        color: #fff;
+        text-shadow: 0 2px 14px rgba(0,0,0,.28);
+    }
+
+    /* ===================== KARTU KONTAK ===================== */
     .contact-icon-box {
         width: 56px;
         height: 56px;
@@ -42,6 +115,33 @@
         transform: translateY(-6px);
         box-shadow: 0 16px 34px rgba(0,0,0,.1) !important;
     }
+
+    /* ===================== FORM ===================== */
+    .form-card .form-control,
+    .form-card .form-select {
+        border-color: #dfe6ea;
+        transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .form-card .form-control:focus,
+    .form-card .form-select:focus {
+        border-color: #17a2b8;
+        box-shadow: 0 0 0 .2rem rgba(23,162,184,.15);
+    }
+
+    .btn-submit-modern {
+        background: linear-gradient(135deg, #0a5c8a, #17a2b8);
+        border: none;
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .btn-submit-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(10,92,138,.25);
+    }
+
+    /* ===================== PETA ===================== */
+    #lokasi-kantor {
+        scroll-margin-top: 100px; /* biar tidak ketutup navbar saat di-scroll dari "Buka Peta" */
+    }
 </style>
 
 <!-- ================= HERO HEADER ================= -->
@@ -51,9 +151,16 @@
             <i class="bi bi-headset text-primary me-1"></i> Pusat Bantuan &amp; Layanan
         </span>
         <h1 class="fw-bold display-5 mb-3">Hubungi Kami</h1>
-        <p class="lead mx-auto text-muted" style="max-width: 650px;">
+        <p class="lead mx-auto" style="max-width: 650px;">
             Punya pertanyaan seputar tempat wisata, agenda festival, atau saran untuk Kota Dumai? Tim kami siap membantu Anda.
         </p>
+    </div>
+
+    {{-- wave divider penutup hero --}}
+    <div class="hero-wave">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,32 C240,60 480,0 720,16 C960,32 1200,60 1440,28 L1440,60 L0,60 Z" fill="#f8f9fa"/>
+        </svg>
     </div>
 </section>
 
@@ -175,7 +282,25 @@
                     </div>
                 @endif
 
-                <form action="{{ route('kontak.store') }}" method="POST">
+                {{-- PENTING: route 'kontak.store' harus terdaftar di routes/web.php, misalnya:
+                     Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store');
+                     Jika route ini belum ada, Laravel akan gagal total membuka halaman ini
+                     (RouteNotFoundException). Kode di bawah dibuat aman: kalau route belum
+                     terdaftar, form tetap tampil (tapi tombol kirim dinonaktifkan) daripada
+                     membuat seluruh halaman error. --}}
+                @php
+                    $formActionTersedia = \Illuminate\Support\Facades\Route::has('kontak.store');
+                @endphp
+
+                @unless($formActionTersedia)
+                    <div class="alert alert-warning small rounded-3">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        Route <code>kontak.store</code> belum terdaftar di <code>routes/web.php</code>,
+                        sehingga formulir belum bisa mengirim data. Tambahkan route dan controller-nya terlebih dahulu.
+                    </div>
+                @endunless
+
+                <form action="{{ $formActionTersedia ? route('kontak.store') : '#' }}" method="POST">
                     @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -190,10 +315,10 @@
                             <label class="form-label fw-semibold small">Kategori Pertanyaan</label>
                             <select name="kategori" class="form-select py-2" required>
                                 <option value="" selected disabled>Pilih Kategori...</option>
-                                <option value="Informasi Wisata" @selected(old('kategori') == 'Informasi Wisata')>Informasi Tempat Wisata</option>
-                                <option value="Agenda Festival" @selected(old('kategori') == 'Agenda Festival')>Agenda Festival / Acara</option>
-                                <option value="Kemitraan & Kerjasama" @selected(old('kategori') == 'Kemitraan & Kerjasama')>Kemitraan &amp; Kerjasama</option>
-                                <option value="Kritik & Saran" @selected(old('kategori') == 'Kritik & Saran')>Kritik &amp; Saran</option>
+                                <option value="Informasi Wisata" {{ old('kategori') == 'Informasi Wisata' ? 'selected' : '' }}>Informasi Tempat Wisata</option>
+                                <option value="Agenda Festival" {{ old('kategori') == 'Agenda Festival' ? 'selected' : '' }}>Agenda Festival / Acara</option>
+                                <option value="Kemitraan & Kerjasama" {{ old('kategori') == 'Kemitraan & Kerjasama' ? 'selected' : '' }}>Kemitraan &amp; Kerjasama</option>
+                                <option value="Kritik & Saran" {{ old('kategori') == 'Kritik & Saran' ? 'selected' : '' }}>Kritik &amp; Saran</option>
                             </select>
                         </div>
                         <div class="col-12">
@@ -201,7 +326,7 @@
                             <textarea name="pesan" rows="4" class="form-control" placeholder="Tuliskan pertanyaan atau pesan Anda di sini..." required>{{ old('pesan') }}</textarea>
                         </div>
                         <div class="col-12 pt-2">
-                            <button type="submit" class="btn btn-primary btn-submit-modern w-100 py-2 fw-semibold shadow-sm">
+                            <button type="submit" class="btn btn-primary btn-submit-modern w-100 py-2 fw-semibold shadow-sm" {{ $formActionTersedia ? '' : 'disabled' }}>
                                 <i class="bi bi-send-fill me-2"></i> Kirim Pesan Sekarang
                             </button>
                         </div>

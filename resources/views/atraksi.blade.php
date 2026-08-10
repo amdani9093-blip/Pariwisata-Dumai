@@ -84,7 +84,7 @@
                     <div class="card atraksi-card">
                         <div class="card-img-wrap">
                             @if ($atraksi->gambar)
-                                <img src="{{ asset('images/' . $atraksi->gambar) }}" alt="{{ $atraksi->nama }}">
+                                <img src="{{ asset('storage/' . $atraksi->gambar) }}" alt="{{ $atraksi->nama }}">
                             @else
                                 <div class="card-img-placeholder">
                                     <i class="bi bi-image"></i>

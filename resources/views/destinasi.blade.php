@@ -63,7 +63,7 @@
                 <!-- CARD -->
                 <div class="destination-card filter-item">
                     <div class="card-media">
-                        <img src="{{ asset('images/' . $destinasi->gambar) }}" alt="Foto {{ $destinasi->nama }}">
+                        <img src="{{ asset('storage/' . $destinasi->gambar) }}" alt="Foto {{ $destinasi->nama }}">
                     </div>
 
                     <div class="card-body">

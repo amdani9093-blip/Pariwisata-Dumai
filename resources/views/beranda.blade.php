@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('body-class', 'page-beranda')
-@section('title', 'Wisata Kota Dumai - Bumi Melayu Pesisir')
+@section('title', 'Welcome to - Dumai Bumi Melayu Pesisir')
 
 @section('content')
 
@@ -19,12 +19,13 @@
             </div>
 
             <span class="hero-eyebrow mb-2">
-                <i class="fas fa-gem me-1 text-warning"></i> Wisata Kota Dumai &middot; Negeri Melayu Pesisir
+                <i class="fas fa-gem me-1 text-warning"></i> Welcome to &middot; Dumai Negeri Melayu Pesisir
             </span>
 
-            <h1 class="fw-bold display-6">Eksplorasi <span class="gold-text">Wisata Kota Dumai</span></h1>
+            <h1 class="fw-bold display-6">Eksplorasi 
+                <span class="gold-text">Wisata Kota Dumai</span></h1>
             <p class="lead mx-auto mb-4" style="max-width: 600px; font-size: 0.98rem; opacity: 0.95;">
-                Temukan keindahan pantai, hutan mangrove, taman rekreasi, dan warisan budaya Melayu Pesisir.
+                Temukan keindahan Pantai, Hutan Mangrove, Taman Rekreasi, dan Warisan Budaya Melayu Pesisir dan Petualangan di Alam.
             </p>
 
             <!-- Search Box & Widget Info Cepat -->
@@ -123,7 +124,7 @@
             <div class="destination-card filter-item {{ $kategoriSlug }}" data-status="{{ $statusBuka ? 'open' : 'closed' }}">
                 <div class="card-media">
                     @if(!empty($destinasi->gambar))
-                        <img src="{{ asset('images/' . $destinasi->gambar) }}" alt="{{ $destinasi->nama }}" loading="lazy">
+                        <img src="{{ asset('storage/' . $destinasi->gambar) }}" alt="{{ $destinasi->nama }}" loading="lazy">
                     @else
                         <img src="{{ asset('images/no-image.jpg') }}" alt="Tidak Ada Gambar" loading="lazy">
                     @endif

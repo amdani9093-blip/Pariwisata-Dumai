@@ -139,7 +139,7 @@
                             <div class="col-md-5">
                                 <div class="preview-box" id="previewBox">
                                     @if($atraksi->gambar)
-                                        <img src="{{ asset('images/atraksi/' . $atraksi->gambar) }}" alt="{{ $atraksi->nama }}" id="previewImg">
+                                        <img src="{{ asset('storage/atraksi/' . $atraksi->gambar) }}" alt="{{ $atraksi->nama }}" id="previewImg">
                                     @else
                                         <span id="previewPlaceholder"><i class="bi bi-image d-block fs-3 mb-1"></i>Pratinjau gambar</span>
                                     @endif
