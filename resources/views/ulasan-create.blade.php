@@ -160,14 +160,7 @@
                             <label class="form-label">
                                 <i class="bi bi-person-fill me-1"></i> Menulis sebagai
                             </label>
-                            <select name="user_id" class="form-select @error('user_id') is-invalid @enderror">
-                                <option value="" selected disabled>-- Pilih Nama --</option>
-                                @foreach ($userList as $user)
-                                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                        {{ $user->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            
                             @error('user_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

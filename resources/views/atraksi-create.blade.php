@@ -35,7 +35,7 @@
 
             {{-- ==================== FORM ==================== --}}
             <div class="form-atraksi-card">
-                <form action="{{ route('atraksi.store') }}" method="POST" id="form-atraksi">
+                <form action="{{ route('atraksi.store') }}" method="POST" id="form-atraksi" enctype="multipart/form-data">
                     @csrf
 
                     {{-- Bagian 1: Informasi Dasar --}}
@@ -48,16 +48,22 @@
                             <h2>Informasi Dasar</h2>
                             <p class="section-desc">Nama dan deskripsi singkat atraksi.</p>
 
-                <select name="destinasi_id" class="form-select @error('destinasi_id') is-invalid @enderror">
-                <option value="" selected disabled>-- Pilih Destinasi --</option>
-                @foreach ($destinasiList as $destinasi)
-                <option value="{{ $destinasi->id }}"
-                {{ old('destinasi_id', $atraksi->destinasi_id) == $destinasi->id ? 'selected' : '' }}>
-                {{ $destinasi->nama }}
-                </option>
-
-                @endforeach
-                </select>
+                            <div class="field-block">
+                                <label for="destinasi_id" class="form-label">Destinasi <span class="req">*</span></label>
+                                <select name="destinasi_id" id="destinasi_id" data-track
+                                        class="form-select @error('destinasi_id') is-invalid @enderror">
+                                    <option value="" selected disabled>-- Pilih Destinasi --</option>
+                                    @foreach ($destinasiList as $destinasi)
+                                        <option value="{{ $destinasi->id }}"
+                                            {{ old('destinasi_id') == $destinasi->id ? 'selected' : '' }}>
+                                            {{ $destinasi->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('destinasi_id')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
 
                             <div class="field-block">
                                 <label for="nama" class="form-label">Nama Atraksi <span class="req">*</span></label>
@@ -141,16 +147,16 @@
                             <p class="section-desc">Gambar yang mewakili atraksi ini.</p>
 
                             <div class="field-block">
-                                <label for="gambar" class="form-label">Nama File Gambar</label>
-                                <input type="text" name="gambar" id="gambar" data-track
-                                       class="form-control @error('gambar') is-invalid @enderror"
-                                       value="{{ old('gambar') }}"
-                                       placeholder="contoh: tari-zapin.jpg"
-                                       autocomplete="off">
-                                <div class="form-text">Gunakan nama file yang sudah diunggah ke folder <code>images/atraksi</code> di server.</div>
+                                <label for="gambar" class="form-label">Gambar</label>
+                                <input type="file" name="gambar" id="gambar" accept="image/*" data-track
+                                       class="form-control @error('gambar') is-invalid @enderror">
+                                <div class="form-text">Unggah gambar (JPG/PNG, maks 2MB). Gambar akan otomatis tersimpan ke storage.</div>
                                 @error('gambar')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                                <div class="preview-box mt-2" id="previewBox" style="display:none;max-width:220px;">
+                                    <img id="previewImg" src="" alt="Pratinjau" style="max-width:100%;border-radius:8px;">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -183,7 +189,7 @@
                         <li data-check="deskripsi"><span class="check-dot"><i class="bi bi-check-lg"></i></span>Deskripsi</li>
                         <li data-check="kategori"><span class="check-dot"><i class="bi bi-check-lg"></i></span>Kategori</li>
                         <li data-check="harga"><span class="check-dot"><i class="bi bi-check-lg"></i></span>Harga</li>
-                        <li data-check="gambar"><span class="check-dot"><i class="bi bi-check-lg"></i></span>Nama file gambar</li>
+                        <li data-check="gambar"><span class="check-dot"><i class="bi bi-check-lg"></i></span>Gambar</li>
                     </ul>
                 </div>
 
@@ -223,7 +229,7 @@
                             <span class="guide-icon"><i class="bi bi-image"></i></span>
                             <span class="guide-text">
                                 <strong>Gambar</strong>
-                                <span>Unggah dulu file-nya ke server, lalu tuliskan nama file-nya di sini (jpg/png).</span>
+                                <span>Unggah langsung file gambarnya di sini (jpg/png), tidak perlu upload manual ke server.</span>
                             </span>
                         </li>
                     </ul>
@@ -246,6 +252,10 @@
             if (field === 'kategori') {
                 return !!document.querySelector('input[name="kategori"]:checked');
             }
+            if (field === 'gambar') {
+                var fileEl = document.getElementById('gambar');
+                return fileEl && fileEl.files && fileEl.files.length > 0;
+            }
             var el = document.getElementById(field);
             return el && el.value.trim().length > 0;
         }
@@ -265,9 +275,29 @@
         }
 
         document.querySelectorAll('[data-track]').forEach(function (el) {
-            var evt = (el.tagName === 'SELECT' || el.type === 'radio') ? 'change' : 'input';
+            var evt = (el.tagName === 'SELECT' || el.type === 'radio' || el.type === 'file') ? 'change' : 'input';
             el.addEventListener(evt, updateProgress);
         });
+
+        // Preview gambar saat file dipilih
+        var gambarInput = document.getElementById('gambar');
+        var previewBox = document.getElementById('previewBox');
+        var previewImg = document.getElementById('previewImg');
+        if (gambarInput) {
+            gambarInput.addEventListener('change', function () {
+                var file = this.files[0];
+                if (!file) {
+                    previewBox.style.display = 'none';
+                    return;
+                }
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    previewBox.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            });
+        }
 
         updateProgress();
     })();

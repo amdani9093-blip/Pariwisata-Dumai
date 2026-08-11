@@ -46,23 +46,24 @@
             <div class="card form-card">
                 <div class="card-body p-4 p-md-5">
 
-                    <form action="{{ route('atraksi.update', $atraksi->id) }}" method="POST" id="formEditAtraksi">
+                    <form action="{{ route('atraksi.update', $atraksi->id) }}" method="POST" id="formEditAtraksi" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
                         <!-- Informasi Umum -->
                         <div class="form-section-title"><i class="bi bi-info-circle"></i> Informasi Umum</div>
-<select name="destinasi_id" class="form-select @error('destinasi_id') is-invalid @enderror">
-    <option value="" selected disabled>-- Pilih Destinasi --</option>
-    @foreach ($destinasiList as $destinasi)
-        <option value="{{ $destinasi->id }}"
-    {{ old('destinasi_id', $atraksi->destinasi_id) == $destinasi->id ? 'selected' : '' }}>
-    {{ $destinasi->nama }}
-</option>
-
-    @endforeach
-</select>
-
+                        <select name="destinasi_id" class="form-select mb-3 @error('destinasi_id') is-invalid @enderror">
+                            <option value="" selected disabled>-- Pilih Destinasi --</option>
+                            @foreach ($destinasiList as $destinasi)
+                                <option value="{{ $destinasi->id }}"
+                                    {{ old('destinasi_id', $atraksi->destinasi_id) == $destinasi->id ? 'selected' : '' }}>
+                                    {{ $destinasi->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('destinasi_id')
+                            <div class="invalid-feedback d-block mb-3">{{ $message }}</div>
+                        @enderror
 
                         <div class="form-floating mb-3">
                             <input type="text" name="nama" id="nama"
@@ -124,17 +125,17 @@
 
                         <div class="row g-3 align-items-start mb-2">
                             <div class="col-md-7">
-                                <div class="form-floating">
-                                    <input type="text" name="gambar" id="gambar"
-                                           class="form-control @error('gambar') is-invalid @enderror"
-                                           placeholder="Nama File Gambar"
-                                           value="{{ old('gambar', $atraksi->gambar) }}">
-                                    <label for="gambar">Nama File Gambar</label>
-                                    @error('gambar')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                <input type="file" name="gambar" id="gambar" accept="image/*"
+                                       class="form-control @error('gambar') is-invalid @enderror">
+                                @error('gambar')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text">
+                                    <i class="bi bi-folder2-open"></i>
+                                    Unggah gambar baru untuk mengganti gambar saat ini (JPG/PNG, maks 2MB).
+                                    Kosongkan jika tidak ingin mengubah gambar.
                                 </div>
-                                <div class="form-text"><i class="bi bi-folder2-open"></i> Contoh: <code>pantai-koneng.jpg</code>. File harus sudah ada di folder <code>public/images/atraksi</code>.</div>
+                                <input type="hidden" name="gambar_lama" value="{{ $atraksi->gambar }}">
                             </div>
                             <div class="col-md-5">
                                 <div class="preview-box" id="previewBox">
@@ -195,7 +196,7 @@
                         <div class="guide-step-number">4</div>
                         <div>
                             <strong class="d-block">Gambar</strong>
-                            <span class="text-muted small">Pastikan nama file sesuai dengan file yang tersimpan di server, lalu cek pratinjau di sebelah kanan.</span>
+                            <span class="text-muted small">Unggah file gambar baru untuk mengganti gambar lama, lalu cek pratinjau di sebelah kanan.</span>
                         </div>
                     </div>
                     <div class="guide-step">
@@ -222,15 +223,18 @@
 
 @push('scripts')
 <script>
-    // Pratinjau otomatis saat nama file gambar diubah
-    document.getElementById('gambar').addEventListener('input', function () {
+    // Pratinjau otomatis saat file gambar baru dipilih
+    document.getElementById('gambar').addEventListener('change', function () {
         const box = document.getElementById('previewBox');
-        const filename = this.value.trim();
-        if (!filename) {
-            box.innerHTML = '<span><i class="bi bi-image d-block fs-3 mb-1"></i>Pratinjau gambar</span>';
+        const file = this.files[0];
+        if (!file) {
             return;
         }
-        box.innerHTML = `<img src="/images/atraksi/${filename}" alt="Pratinjau" onerror="this.parentElement.innerHTML='<span><i class=\\'bi bi-exclamation-circle d-block fs-3 mb-1\\'></i>File tidak ditemukan</span>'">`;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            box.innerHTML = `<img src="${e.target.result}" alt="Pratinjau">`;
+        };
+        reader.readAsDataURL(file);
     });
 </script>
 @endpush
