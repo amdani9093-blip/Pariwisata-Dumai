@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Laravel\Socialite\Facades\Socialite;
+
 
 
 class AuthController extends Controller
@@ -13,7 +17,53 @@ class AuthController extends Controller
 {
     return view('login');
 }
+
+public function redirectToWhatsApp()
+{
+    return redirect()->away(
+        'https://wa.me/685278776696'
+    );
+}
+
+public function redirectToGoogle()
+{
+    return Socialite::driver('google')->redirect();
+}
  
+/**
+ * Menangani balasan (callback) dari Google setelah user login.
+ */
+public function handleGoogleCallback()
+{
+    $googleUser = Socialite::driver('google')->user();
+ 
+    // Cari user berdasarkan google_id, atau berdasarkan email
+    // kalau sebelumnya sudah pernah daftar manual.
+    $user = User::where('google_id', $googleUser->getId())
+        ->orWhere('email', $googleUser->getEmail())
+        ->first();
+ 
+    if (! $user) {
+        $user = User::create([
+            'name'      => $googleUser->getName(),
+            'email'     => $googleUser->getEmail(),
+            'google_id' => $googleUser->getId(),
+            'password'  => bcrypt(Str::random(16)),
+        ]);
+    } else {
+        // Kalau user sudah ada tapi belum tersimpan google_id-nya
+        if (! $user->google_id) {
+            $user->update(['google_id' => $googleUser->getId()]);
+        }
+    }
+ 
+    Auth::login($user);
+ 
+    return redirect()->route('beranda')
+        ->with('success', 'Berhasil login dengan Google.');
+}
+ 
+
 public function login(Request $request)
 {
     $credentials = $request->validate([

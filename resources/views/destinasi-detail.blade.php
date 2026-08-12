@@ -85,10 +85,11 @@
                     <a href="{{ route('beranda') }}#kontak" class="action-btn btn-contact">
                         <i class="bi bi-chat-dots"></i> Hubungi Kami
                     </a>
-
+            @if(Auth::check() && Auth::user()->role === 'admin')
                     <a href="{{ route('destinasi.edit', $destinasi->id) }}" class="action-btn btn-edit">
                         <i class="bi bi-pencil-square"></i> Edit
                     </a>
+@endif
 
                     <form action="{{ route('destinasi.destroy', $destinasi->id) }}"
                           method="POST"
@@ -96,9 +97,11 @@
                           onsubmit="return confirm('Yakin ingin menghapus {{ $destinasi->nama }} beserta gambarnya? Tindakan ini tidak bisa dibatalkan.')">
                         @csrf
                         @method('DELETE')
+                        @if(Auth::check() && Auth::user()->role === 'admin')
                         <button type="submit" class="btn-delete">
                             <i class="bi bi-trash"></i> Hapus
                         </button>
+                        @endif
                     </form>
                 </div>
             </div>
@@ -214,7 +217,7 @@
                     <div class="col-6 col-md-4">
                         <div class="atraksi-card card h-100">
                             <div class="atraksi-img-wrap">
-                                <img src="{{ asset('images/' . $atraksi->gambar) }}"
+                                <img src="{{ asset('storage/' . $atraksi->gambar) }}"
                                      alt="{{ $atraksi->nama }}"
                                      loading="lazy">
                             </div>
