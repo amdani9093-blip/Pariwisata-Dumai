@@ -22,7 +22,7 @@
                 <i class="fas fa-gem me-1 text-warning"></i> Welcome to &middot; Dumai Negeri Melayu Pesisir
             </span>
 
-            <h1 class="fw-bold display-6">Eksplorasi 
+            <h1 class="fw-bold display-6">Eksplorasi
                 <span class="gold-text">Wisata Kota Dumai</span></h1>
             <p class="lead mx-auto mb-4" style="max-width: 600px; font-size: 0.98rem; opacity: 0.95;">
                 Temukan keindahan Pantai, Hutan Mangrove, Taman Rekreasi, dan Warisan Budaya Melayu Pesisir dan Petualangan di Alam.
@@ -50,66 +50,105 @@
 <!-- ================= TAMPILAN KATALOG & KALKULATOR RUTE ================= -->
 <div class="container pb-5">
 
-    <<!-- ================= FILTER DESTINASI ================= -->
-<div class="filter-toolbar shadow-sm rounded-4 p-4 mb-5">
+    @php
+        // Ambil daftar kategori unik dari $kategoriList jika ada,
+        // kalau tidak, turunkan dari relasi kategori pada $destinasiList.
+        $kategoriUntukFilter = collect($kategoriList ?? [])
+            ->map(fn ($k) => $k->nama_kategori ?? null)
+            ->filter()
+            ->unique();
 
-    <div class="row align-items-center">
+        if ($kategoriUntukFilter->isEmpty()) {
+            $kategoriUntukFilter = collect($destinasiList ?? [])
+                ->map(fn ($d) => $d->kategori->nama_kategori ?? null)
+                ->filter()
+                ->unique();
+        }
+    @endphp
 
-        <!-- Judul -->
-        <div class="col-lg-4 mb-3 mb-lg-0">
-            <h4 class="fw-bold mb-1">
-                <i class="fas fa-map-marked-alt text-warning me-2"></i>
-                Jelajahi Destinasi Unggulan
-            </h4>
+    <!-- ================= FILTER DESTINASI ================= -->
+    <div class="filter-toolbar shadow-sm rounded-4 p-4 mb-5">
 
-            <small class="text-muted">
-                Temukan destinasi wisata terbaik di Kota Dumai
-            </small>
-        </div>
+        <div class="row align-items-center">
 
-        <!-- Filter -->
-        <div class="col-lg-5">
+            <!-- Judul -->
+            <div class="col-lg-4 mb-3 mb-lg-0">
+                <h4 class="fw-bold mb-1">
+                    <i class="fas fa-map-marked-alt text-warning me-2"></i>
+                    Jelajahi Destinasi Unggulan
+                </h4>
 
-            <div class="filter-menu">
-
-                <button class="filter-btn active"
-                        onclick="filterSelection('all', this)">
-                    <i class="fas fa-border-all"></i>
-                    Semua
-                
-
+                <small class="text-muted">
+                    Temukan destinasi wisata terbaik di Kota Dumai
+                </small>
             </div>
 
-        </div>
+            <!-- Filter: dropdown kategori + chip toggle jadi satu bar -->
+            <div class="col-lg-8">
 
-        <!-- Status -->
-        <div class="col-lg-3">
+                <div class="filter-control-group">
 
-            <div class="only-open-box">
+                    <div class="filter-dropdown" id="filterDropdown">
 
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="onlyOpenCheck"
-                    onchange="toggleOnlyOpen(this)">
+                        <button
+                            type="button"
+                            class="filter-dropdown-toggle"
+                            id="filterDropdownToggle"
+                            aria-haspopup="listbox"
+                            aria-expanded="false"
+                        >
+                            <i class="fas fa-layer-group"></i>
+                            <span id="filterDropdownLabel">Semua Kategori</span>
+                            <i class="fas fa-chevron-down filter-dropdown-caret"></i>
+                        </button>
 
-                <label
-                    class="form-check-label"
-                    for="onlyOpenCheck">
+                        <ul class="filter-dropdown-menu" id="filterDropdownMenu" role="listbox">
 
-                    <i class="fas fa-door-open text-success me-2"></i>
+                            <li>
+                                <button
+                                    type="button"
+                                    class="filter-dropdown-item active"
+                                    onclick="filterSelection('all', this)"
+                                >
+                                    <i class="fas fa-border-all"></i>
+                                    Semua
+                                </button>
+                            </li>
 
-                    Sedang Buka
+                            @foreach ($kategoriUntukFilter as $namaKategori)
+                                <li>
+                                    <button
+                                        type="button"
+                                        class="filter-dropdown-item"
+                                        onclick="filterSelection('{{ \Illuminate\Support\Str::slug($namaKategori) }}', this)"
+                                    >
+                                        <i class="fas fa-location-dot"></i>
+                                        {{ $namaKategori }}
+                                    </button>
+                                </li>
+                            @endforeach
 
-                </label>
+                        </ul>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="filter-chip-toggle"
+                        id="onlyOpenChip"
+                        onclick="toggleOnlyOpen(this)"
+                    >
+                        <i class="fas fa-door-open"></i>
+                        Sedang Buka
+                    </button>
+
+                </div>
 
             </div>
 
         </div>
 
     </div>
-
-</div>
 
     <!-- Grid Destinasi Wisata -->
     <div class="card-grid mb-5" id="destinasiGrid">
@@ -118,7 +157,8 @@
                 date_default_timezone_set('Asia/Jakarta');
                 $jamSekarang = now()->format('H:i:s');
                 $statusBuka = ($jamSekarang >= $destinasi->jam_buka && $jamSekarang <= $destinasi->jam_tutup);
-                $kategoriSlug = strtolower($destinasi->kategori ?? 'umum');
+                $namaKategori = $destinasi->kategori->nama_kategori ?? 'Umum';
+                $kategoriSlug = \Illuminate\Support\Str::slug($namaKategori);
             @endphp
 
             <div class="destination-card filter-item {{ $kategoriSlug }}" data-status="{{ $statusBuka ? 'open' : 'closed' }}">
@@ -128,7 +168,7 @@
                     @else
                         <img src="{{ asset('images/no-image.jpg') }}" alt="Tidak Ada Gambar" loading="lazy">
                     @endif
-                    <span class="badge">{{ $destinasi->kategori ?? 'Wisata' }}</span>
+                    <span class="badge">{{ $namaKategori }}</span>
                 </div>
 
                 <div class="card-body">
@@ -260,12 +300,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }, { threshold: 0.1 });
 
     cards.forEach(function (card) { observer.observe(card); });
+
+    // 4. Buka/tutup dropdown filter kategori
+    const filterDropdown = document.getElementById("filterDropdown");
+    const filterDropdownToggle = document.getElementById("filterDropdownToggle");
+
+    if (filterDropdown && filterDropdownToggle) {
+        filterDropdownToggle.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const isOpen = filterDropdown.classList.toggle("open");
+            filterDropdownToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        document.addEventListener("click", function (e) {
+            if (!filterDropdown.contains(e.target)) {
+                filterDropdown.classList.remove("open");
+                filterDropdownToggle.setAttribute("aria-expanded", "false");
+            }
+        });
+    }
 });
 
-// 4. Filter Kategori
-function filterSelection(category, btn) {
+// 5. Filter Kategori (dipanggil dari item dropdown)
+function filterSelection(category, item) {
     let items = document.getElementsByClassName("filter-item");
-    let buttons = document.getElementsByClassName("filter-btn");
+    let dropdownItems = document.getElementsByClassName("filter-dropdown-item");
     let target = category === "all" ? "" : category;
 
     for (let i = 0; i < items.length; i++) {
@@ -273,20 +332,40 @@ function filterSelection(category, btn) {
         items[i].style.display = (target === "" || classes.indexOf(target) > -1) ? "" : "none";
     }
 
-    for (let i = 0; i < buttons.length; i++) { buttons[i].classList.remove("active"); }
-    if (btn) btn.classList.add("active");
+    for (let i = 0; i < dropdownItems.length; i++) {
+        dropdownItems[i].classList.remove("active");
+    }
+
+    if (item) {
+        item.classList.add("active");
+
+        const label = document.getElementById("filterDropdownLabel");
+        if (label) {
+            label.textContent = item.textContent.trim();
+        }
+    }
+
+    const filterDropdown = document.getElementById("filterDropdown");
+    const filterDropdownToggle = document.getElementById("filterDropdownToggle");
+    if (filterDropdown) {
+        filterDropdown.classList.remove("open");
+        if (filterDropdownToggle) filterDropdownToggle.setAttribute("aria-expanded", "false");
+    }
 }
 
-// 5. Toggle Filter Hanya Buka
-function toggleOnlyOpen(checkbox) {
+// 6. Toggle Filter Hanya Buka (chip)
+function toggleOnlyOpen(chip) {
+    chip.classList.toggle("active");
+    let onlyOpen = chip.classList.contains("active");
+
     let items = document.querySelectorAll(".destination-card");
     items.forEach(function (card) {
         let status = card.getAttribute("data-status");
-        card.style.display = (checkbox.checked && status !== "open") ? "none" : "";
+        card.style.display = (onlyOpen && status !== "open") ? "none" : "";
     });
 }
 
-// 6. Estimasi Perjalanan Sederhana
+// 7. Estimasi Perjalanan Sederhana
 function calculateTrip() {
     let start = document.getElementById("startPointSelect").value;
     let dest = document.getElementById("destinationSelect").value;

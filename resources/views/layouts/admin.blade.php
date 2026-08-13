@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin - @yield('title')</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { display: flex; min-height: 100vh; margin: 0; }
@@ -18,6 +19,7 @@
 <body>
     <div class="sidebar">
         <h5 class="mb-4">Pariwisata Dumai <small class="d-block">Admin</small></h5>
+        <a href="{{ route('kategori') }}">Kelola Kategori</a>
         <a href="{{ route('admin.dashboard') }}">Dashboard</a>
         <a href="{{ route('destinasi') }}">Kelola Destinasi</a>
         <a href="{{ route('atraksi') }}">Kelola Atraksi</a>

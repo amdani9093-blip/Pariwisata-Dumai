@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AtraksiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\KategoriController;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,7 +101,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         Route::put('/settings/password', [SettingsController::class, 'updatePassword'])
             ->name('settings.password.update');
+
     });
+
+    Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori');
+    Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
+    Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
+    Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
+    Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
+    Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
 });
 
 // Route {id} generik untuk destinasi HARUS PALING BAWAH

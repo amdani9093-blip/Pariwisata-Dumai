@@ -1,243 +1,544 @@
 @extends('layouts.app')
+
 @section('body-class', 'page-destinasi-detail')
-@section('title', $destinasi->nama . ' - Detail Destinasi')
+@section('title', ($destinasi->nama ?? 'Destinasi') . ' - Detail Destinasi')
 
 @section('content')
 
-    {{-- External Stylesheet --}}
-    <link rel="stylesheet" href="{{ asset('css/destinasi-detail.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/destinasi-detail-tambahan.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <div class="container py-5">
+<link rel="stylesheet" href="{{ asset('css/destinasi-detail.css') }}">
 
+<div class="destination-detail-page">
 
-        
-        {{-- ===================== BREADCRUMB ===================== --}}
-        <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="{{ route('beranda') }}">Beranda</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="{{ route('destinasi') }}">Destinasi</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">
-                    {{ $destinasi->nama }}
-                </li>
-            </ol>
+    <div class="destination-container">
+
+        {{-- BREADCRUMB --}}
+        <nav class="destination-breadcrumb" aria-label="breadcrumb">
+            <a href="{{ route('beranda') }}">
+                <i class="bi bi-house-door-fill"></i>
+                Beranda
+            </a>
+            <i class="bi bi-chevron-right"></i>
+            <a href="{{ route('destinasi') }}">Destinasi</a>
+            <i class="bi bi-chevron-right"></i>
+            <span>{{ $destinasi->nama }}</span>
         </nav>
 
+        {{-- DETAIL UTAMA --}}
+        <section class="destination-hero-card">
 
+            <div class="destination-hero-grid">
 
-        {{-- ===================== KONTEN UTAMA ===================== --}}
-        <div class="row g-4">
+                {{-- FOTO --}}
+                <div class="destination-photo-column">
+                    <div class="destination-main-photo">
 
-            {{-- Gambar destinasi --}}
-            <div class="col-md-6">
-                <div class="detail-image-wrap">
-                    <span class="badge-status">
-                        <span class="dot"></span>Sedang Buka
-                    </span>
-                    <img src="{{ asset('storage/' . $destinasi->gambar) }}"
-                         alt="{{ $destinasi->nama }}">
-                </div>
-            </div>
+                        <div class="destination-photo-shine"></div>
 
-
-            {{-- Pengaturan Informasi destinasi --}}
-            <div class="col-md-6">
-                <h1 class="mb-3">{{ $destinasi->nama }}</h1>
-
-                <p class="lead">{{ $destinasi->deskripsi }}</p>
-
-                <ul class="list-group list-group-flush info-list mb-4">
-                    <li class="list-group-item">
-                        <span class="info-icon"><i class="bi bi-clock"></i></span>
-                        <span>
-                            <strong>Jam Operasional:</strong>
-                            {{ $destinasi->jam_buka }} - {{ $destinasi->jam_tutup }}
+                        <span class="destination-open-badge">
+                            <span class="destination-status-dot"></span>
+                            Sedang Buka
                         </span>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="info-icon"><i class="bi bi-geo-alt"></i></span>
-                        <span>
-                            <strong>Lokasi:</strong> {{ $destinasi->lokasi }}
-                        </span>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="info-icon"><i class="bi bi-ticket-perforated"></i></span>
-                        <span>
-                            <strong>Harga Tiket:</strong>
-                            <span class="price-tag {{ $destinasi->harga_tiket == 0 ? 'gratis' : '' }}">
-                                {{ $destinasi->harga_tiket == 0 ? 'Gratis' : 'Rp ' . number_format($destinasi->harga_tiket, 0, ',', '.') }}
-                            </span>
-                        </span>
-                    </li>
-                </ul>
 
-                <div class="d-flex flex-wrap gap-2 align-items-center">
-                    <a href="{{ route('destinasi') }}" class="action-btn btn-back">
-                        <i class="bi bi-arrow-left"></i> Kembali ke Destinasi
-                    </a>
-
-                    <a href="{{ route('beranda') }}#kontak" class="action-btn btn-contact">
-                        <i class="bi bi-chat-dots"></i> Hubungi Kami
-                    </a>
-            @if(Auth::check() && Auth::user()->role === 'admin')
-                    <a href="{{ route('destinasi.edit', $destinasi->id) }}" class="action-btn btn-edit">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </a>
-@endif
-
-                    <form action="{{ route('destinasi.destroy', $destinasi->id) }}"
-                          method="POST"
-                          class="d-inline"
-                          onsubmit="return confirm('Yakin ingin menghapus {{ $destinasi->nama }} beserta gambarnya? Tindakan ini tidak bisa dibatalkan.')">
-                        @csrf
-                        @method('DELETE')
-                        @if(Auth::check() && Auth::user()->role === 'admin')
-                        <button type="submit" class="btn-delete">
-                            <i class="bi bi-trash"></i> Hapus
-                        </button>
+                        @if(!empty($destinasi->gambar))
+                            <img
+                                src="{{ asset('storage/' . $destinasi->gambar) }}"
+                                alt="Foto {{ $destinasi->nama }}"
+                                loading="eager"
+                            >
+                        @else
+                            <img
+                                src="{{ asset('images/no-image.jpg') }}"
+                                alt="Gambar {{ $destinasi->nama }} tidak tersedia"
+                                loading="eager"
+                            >
                         @endif
-                    </form>
+
+                        <div class="destination-photo-caption">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <span>{{ $destinasi->lokasi ?? 'Kota Dumai' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- INFORMASI --}}
+                <div class="destination-info-column">
+
+                    @if(!empty($destinasi->kategori))
+                        <span class="destination-category">
+                            <i class="bi bi-tag-fill"></i>
+                            {{ $destinasi->kategori->nama_kategori }}
+                        </span>
+                    @endif
+
+                    <span class="destination-eyebrow">
+                        ✦ DESTINASI WISATA DUMAI
+                    </span>
+
+                    <h1 class="destination-title">
+                        {{ $destinasi->nama }}
+                    </h1>
+
+                    <div class="destination-title-line"></div>
+
+                    <div class="destination-description">
+                        @if(!empty($destinasi->deskripsi))
+                            <p>{{ $destinasi->deskripsi }}</p>
+                        @else
+                            <p class="is-muted">Deskripsi destinasi belum tersedia.</p>
+                        @endif
+                    </div>
+
+                    <div class="destination-info-grid">
+
+                        <div class="destination-info-box">
+                            <span class="destination-info-icon">
+                                <i class="bi bi-clock-fill"></i>
+                            </span>
+                            <div>
+                                <small>Jam Operasional</small>
+                                <strong>
+                                    @if(!empty($destinasi->jam_buka) || !empty($destinasi->jam_tutup))
+                                        {{ $destinasi->jam_buka ?? '-' }} – {{ $destinasi->jam_tutup ?? '-' }}
+                                    @else
+                                        Belum tersedia
+                                    @endif
+                                </strong>
+                            </div>
+                        </div>
+
+                        <div class="destination-info-box">
+                            <span class="destination-info-icon">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </span>
+                            <div>
+                                <small>Lokasi</small>
+                                <strong>{{ $destinasi->lokasi ?? 'Lokasi belum tersedia' }}</strong>
+                            </div>
+                        </div>
+
+                        <div class="destination-info-box">
+                            <span class="destination-info-icon">
+                                <i class="bi bi-ticket-perforated-fill"></i>
+                            </span>
+                            <div>
+                                <small>Harga Tiket</small>
+                                @if(($destinasi->harga_tiket ?? 0) == 0)
+                                    <strong class="price-free">Gratis</strong>
+                                @else
+                                    <strong class="price-normal">
+                                        Rp {{ number_format($destinasi->harga_tiket, 0, ',', '.') }}
+                                    </strong>
+                                @endif
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="destination-actions">
+
+                        <a href="{{ route('destinasi') }}" class="destination-action destination-action-back">
+                            <i class="bi bi-arrow-left"></i>
+                            Kembali
+                        </a>
+
+                        <a href="{{ route('beranda') }}#kontak" class="destination-action destination-action-contact">
+                            <i class="bi bi-chat-dots-fill"></i>
+                            Hubungi Kami
+                        </a>
+
+                        @if(!empty($destinasi->lokasi))
+                            <a
+                                href="https://www.google.com/maps/search/?api=1&query={{ urlencode($destinasi->lokasi) }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="destination-action destination-action-map"
+                            >
+                                <i class="bi bi-map-fill"></i>
+                                Lihat Maps
+                            </a>
+                        @endif
+
+                        @if(Auth::check() && Auth::user()->role === 'admin')
+
+                            <a
+                                href="{{ route('destinasi.edit', $destinasi->id) }}"
+                                class="destination-action destination-action-edit"
+                            >
+                                <i class="bi bi-pencil-square"></i>
+                                Edit
+                            </a>
+
+                            <form
+                                action="{{ route('destinasi.destroy', $destinasi->id) }}"
+                                method="POST"
+                                class="destination-delete-form"
+                                onsubmit="return confirm('Yakin ingin menghapus {{ $destinasi->nama }} beserta gambarnya? Tindakan ini tidak bisa dibatalkan.')"
+                            >
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit" class="destination-action destination-action-delete">
+                                    <i class="bi bi-trash3-fill"></i>
+                                    Hapus
+                                </button>
+                            </form>
+
+                        @endif
+
+                    </div>
+
                 </div>
             </div>
-        </div>
 
-        <hr class="my-5">
+        </section>
 
-        
+        {{-- ATRAKSI --}}
+        <section class="destination-section destination-attraction-section">
 
-        {{-- ===================== PENGATURAN FASILITAS ===================== --}}
-        <h5 class="mb-3">Fasilitas Tersedia</h5>
-        <div class="row row-cols-2 row-cols-md-4 g-3">
-            <div class="col">
-                <div class="facility-box">
-                    <i class="bi bi-p-circle"></i>
-                    Area Parkir
-                </div>
-            </div>
-            <div class="col">
-                <div class="facility-box">
-                    <i class="bi bi-house-door"></i>
-                    Toilet Umum
-                </div>
-            </div>
-            <div class="col">
-                <div class="facility-box">
-                    <i class="bi bi-shop"></i>
-                    Warung/Kios
-                </div>
-            </div>
-            <div class="col">
-                <div class="facility-box">
-                    <i class="bi bi-camera"></i>
-                    Spot Foto
-                </div>
-            </div>
-        </div>
-
-        <hr class="my-5">
-
-        {{-- ===================== PENGATURAN ULASAN (gaya testimoni elegan) ===================== --}}
-        <div class="detail-ulasan mb-5">
-            <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+            <div class="destination-section-heading">
                 <div>
-                    <span class="ulasan-elegant-eyebrow">&#9670; Kata Pengunjung</span>
-                    <h2 class="ulasan-elegant-title">Ulasan Pengunjung</h2>
+                    <span class="destination-section-eyebrow">✦ JELAJAHI LEBIH BANYAK</span>
+                    <h2>Atraksi di Destinasi Ini</h2>
+                    <p>Nikmati berbagai atraksi dan pengalaman menarik yang tersedia di destinasi ini.</p>
+                </div>
+            </div>
+
+            <div class="destination-attraction-grid">
+
+                @forelse($destinasi->atraksi ?? [] as $atraksi)
+
+                    <article class="destination-attraction-card">
+
+                        <div class="destination-attraction-image">
+
+                            @if(!empty($atraksi->gambar))
+                                <img
+                                    src="{{ asset('storage/' . $atraksi->gambar) }}"
+                                    alt="{{ $atraksi->nama }}"
+                                    loading="lazy"
+                                >
+                            @else
+                                <img
+                                    src="{{ asset('images/no-image.jpg') }}"
+                                    alt="Gambar {{ $atraksi->nama }} tidak tersedia"
+                                    loading="lazy"
+                                >
+                            @endif
+
+                        </div>
+
+                        <div class="destination-attraction-body">
+
+                            @if(!empty($atraksi->kategori))
+                                <span class="destination-attraction-category">
+                                    ✦ {{ $atraksi->kategori }}
+                                </span>
+                            @endif
+
+                            <h3>{{ $atraksi->nama }}</h3>
+
+                            @if(!empty($atraksi->deskripsi))
+                                <p>
+                                    {{ \Illuminate\Support\Str::limit(strip_tags($atraksi->deskripsi), 100) }}
+                                </p>
+                            @endif
+
+                            @if(isset($atraksi->harga))
+                                <div class="destination-attraction-price">
+                                    <small>Harga</small>
+                                    @if($atraksi->harga == 0)
+                                        <strong class="price-free">Gratis</strong>
+                                    @else
+                                        <strong>Rp {{ number_format($atraksi->harga, 0, ',', '.') }}</strong>
+                                    @endif
+                                </div>
+                            @endif
+
+                            <button
+                                type="button"
+                                class="destination-detail-button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalAtraksi{{ $atraksi->id }}"
+                            >
+                                <span>Lihat Detail</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                    {{-- MODAL ATRAKSI --}}
+                    <div
+                        class="modal fade destination-modal"
+                        id="modalAtraksi{{ $atraksi->id }}"
+                        tabindex="-1"
+                        aria-labelledby="modalAtraksiLabel{{ $atraksi->id }}"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <div>
+                                        <small>ATRAKSI DESTINASI</small>
+                                        <h5 class="modal-title" id="modalAtraksiLabel{{ $atraksi->id }}">
+                                            {{ $atraksi->nama }}
+                                        </h5>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Tutup"
+                                    ></button>
+                                </div>
+
+                                <div class="modal-body">
+
+                                    @if(!empty($atraksi->gambar))
+                                        <img
+                                            src="{{ asset('storage/' . $atraksi->gambar) }}"
+                                            class="destination-modal-image"
+                                            alt="{{ $atraksi->nama }}"
+                                        >
+                                    @endif
+
+                                    <div class="destination-modal-meta">
+
+                                        @if(!empty($atraksi->kategori))
+                                            <span>
+                                                <i class="bi bi-tag-fill"></i>
+                                                {{ $atraksi->kategori }}
+                                            </span>
+                                        @endif
+
+                                        @if(isset($atraksi->harga))
+                                            <span>
+                                                <i class="bi bi-ticket-perforated-fill"></i>
+                                                @if($atraksi->harga == 0)
+                                                    Gratis
+                                                @else
+                                                    Rp {{ number_format($atraksi->harga, 0, ',', '.') }}
+                                                @endif
+                                            </span>
+                                        @endif
+
+                                    </div>
+
+                                    @if(!empty($atraksi->deskripsi))
+                                        <div class="destination-modal-description">
+                                            {!! nl2br(e($atraksi->deskripsi)) !!}
+                                        </div>
+                                    @else
+                                        <p class="is-muted">Deskripsi atraksi belum tersedia.</p>
+                                    @endif
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="destination-modal-close" data-bs-dismiss="modal">
+                                        Tutup
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                @empty
+
+                    <div class="destination-empty-state">
+                        <div class="destination-empty-icon">
+                            <i class="bi bi-compass"></i>
+                        </div>
+                        <div>
+                            <h3>Belum Ada Atraksi</h3>
+                            <p>Belum ada atraksi untuk destinasi ini. Nantikan informasi menarik lainnya.</p>
+                        </div>
+                    </div>
+
+                @endforelse
+
+            </div>
+
+        </section>
+
+        {{-- ULASAN --}}
+        <section class="destination-section destination-review-section">
+
+            <div class="destination-review-heading">
+
+                <div>
+                    <span class="destination-section-eyebrow">✧ KATA PENGUNJUNG</span>
+                    <h2>Ulasan Pengunjung</h2>
                 </div>
 
-                @if ($destinasi->ulasan->count() > 0)
+                @if($destinasi->ulasan && $destinasi->ulasan->count() > 0)
+
                     @php
                         $rataRating = $destinasi->ulasan->avg('rating');
                         $totalUlasan = $destinasi->ulasan->count();
                     @endphp
-                    <div class="ulasan-summary">
-                        <span class="ulasan-summary-score">{{ number_format($rataRating, 1) }}</span>
-                        <div class="ulasan-summary-meta">
-                            <div class="ulasan-summary-stars">
-                                @for ($i = 1; $i <= 5; $i++)
+
+                    <div class="destination-rating-summary">
+                        <strong>{{ number_format($rataRating, 1) }}</strong>
+
+                        <div>
+                            <div class="destination-stars">
+                                @for($i = 1; $i <= 5; $i++)
                                     <i class="bi {{ $i <= round($rataRating) ? 'bi-star-fill' : 'bi-star' }}"></i>
                                 @endfor
                             </div>
-                            <small>{{ $totalUlasan }} ulasan</small>
+                            <small>{{ $totalUlasan }} {{ $totalUlasan == 1 ? 'ulasan' : 'ulasan' }}</small>
                         </div>
                     </div>
+
                 @endif
+
             </div>
 
-            @forelse ($destinasi->ulasan as $ulasan)
-                <div class="ulasan-elegant-card">
-                    <div class="ulasan-elegant-photo">
-                        @if (!empty($ulasan->foto))
-                            <img src="{{ asset('images/' . $ulasan->foto) }}" alt="{{ $ulasan->user->name }}">
-                        @elseif (!empty($ulasan->user->foto))
-                            <img src="{{ asset('images/' . $ulasan->user->foto) }}" alt="{{ $ulasan->user->name }}">
-                        @else
-                            {{ strtoupper(substr($ulasan->user->name, 0, 1)) }}
-                        @endif
-                    </div>
-                    <div class="ulasan-elegant-content">
-                        <div class="ulasan-elegant-name">{{ $ulasan->user->name }}</div>
-                        <div class="ulasan-elegant-stars">
-                            @for ($i = 1; $i <= 5; $i++)
-                                <i class="bi {{ $i <= $ulasan->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
-                            @endfor
+            <div class="destination-review-list">
+
+                @forelse($destinasi->ulasan ?? [] as $ulasan)
+
+                    @php
+                        $namaUser = optional($ulasan->user)->name ?? 'Pengunjung';
+                        $initial = strtoupper(substr($namaUser, 0, 1));
+                    @endphp
+
+                    <article class="destination-review-card">
+
+                        <div class="destination-review-avatar">
+
+                            @if(!empty($ulasan->foto))
+                                <img
+                                    src="{{ asset('images/' . $ulasan->foto) }}"
+                                    alt="{{ $namaUser }}"
+                                    loading="lazy"
+                                >
+                            @elseif(!empty(optional($ulasan->user)->foto))
+                                <img
+                                    src="{{ asset('images/' . $ulasan->user->foto) }}"
+                                    alt="{{ $namaUser }}"
+                                    loading="lazy"
+                                >
+                            @else
+                                {{ $initial }}
+                            @endif
+
                         </div>
-                        <p class="ulasan-elegant-quote">{{ $ulasan->komentar }}</p>
-                        @if (!empty($ulasan->created_at))
-                            <span class="ulasan-elegant-date">{{ $ulasan->created_at->format('d M Y') }}</span>
-                        @endif
-                        <span class="ulasan-elegant-mark">&rdquo;</span>
-                    </div>
-                </div>
-            @empty
-                <div class="ulasan-empty">
-                    <i class="bi bi-chat-square-heart"></i>
-                    <span>Belum ada ulasan untuk destinasi ini. Jadilah yang pertama berbagi pengalaman!</span>
-                </div>
-            @endforelse
 
-            <a href="{{ route('ulasan.create', $destinasi->id) }}" class="action-btn btn-tulis-ulasan mt-3">
-                <i class="bi bi-pencil-square"></i> Tulis Ulasan
-            </a>
-        </div>
+                        <div class="destination-review-content">
 
-        <hr class="my-5">
+                            <div class="destination-review-top">
+                                <div>
+                                    <h3>{{ $namaUser }}</h3>
 
-        {{-- ===================== PENGATURAN ATRAKSI ===================== --}}
-        <div class="detail-atraksi">
-            <h2 class="section-title">Atraksi di Destinasi Ini</h2>
+                                    <div class="destination-stars">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="bi {{ $i <= $ulasan->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
+                                        @endfor
+                                    </div>
+                                </div>
 
-            <div class="row g-4">
-                @forelse ($destinasi->atraksi as $atraksi)
-                    <div class="col-6 col-md-4">
-                        <div class="atraksi-card card h-100">
-                            <div class="atraksi-img-wrap">
-                                <img src="{{ asset('storage/' . $atraksi->gambar) }}"
-                                     alt="{{ $atraksi->nama }}"
-                                     loading="lazy">
+                                @if(!empty($ulasan->created_at))
+                                    <time datetime="{{ $ulasan->created_at->toDateString() }}">
+                                        {{ $ulasan->created_at->format('d M Y') }}
+                                    </time>
+                                @endif
                             </div>
-                            <div class="card-body">
-                                <h6 class="card-title">{{ $atraksi->nama }}</h6>
-                                <span class="badge-kategori">{{ $atraksi->kategori }}</span>
-                            </div>
+
+                            @if(!empty($ulasan->komentar))
+                                <p class="destination-review-quote">
+                                    “{{ $ulasan->komentar }}”
+                                </p>
+                            @else
+                                <p class="destination-review-quote is-muted">
+                                    Pengunjung tidak memberikan komentar.
+                                </p>
+                            @endif
+
                         </div>
-                    </div>
+
+                    </article>
+
                 @empty
-                    <div class="atraksi-empty">
-                        <i class="bi bi-emoji-frown"></i>
-                        <span>Belum ada atraksi untuk destinasi ini.</span>
+
+                    <div class="destination-empty-state">
+                        <div class="destination-empty-icon">
+                            <i class="bi bi-chat-square-heart"></i>
+                        </div>
+                        <div>
+                            <h3>Belum Ada Ulasan</h3>
+                            <p>Jadilah yang pertama berbagi pengalaman berkunjung ke destinasi ini.</p>
+                        </div>
                     </div>
+
                 @endforelse
+
             </div>
+
+            <a href="{{ route('ulasan.create', $destinasi->id) }}" class="destination-write-review">
+                <i class="bi bi-pencil-square"></i>
+                Tulis Ulasan
+            </a>
+
+        </section>
+
+        {{-- FASILITAS --}}
+        <section class="destination-section destination-facility-section">
+
+            <div class="destination-section-heading">
+                <div>
+                    <span class="destination-section-eyebrow">✦ KENYAMANAN PENGUNJUNG</span>
+                    <h2>Fasilitas Tersedia</h2>
+                    <p>Berbagai fasilitas untuk mendukung kenyamanan Anda selama berkunjung.</p>
+                </div>
+            </div>
+
+            <div class="destination-facility-grid">
+
+                <div class="destination-facility-card">
+                    <span><i class="bi bi-p-circle-fill"></i></span>
+                    <strong>Area Parkir</strong>
+                    <small>Parkir pengunjung</small>
+                </div>
+
+                <div class="destination-facility-card">
+                    <span><i class="bi bi-house-door-fill"></i></span>
+                    <strong>Toilet Umum</strong>
+                    <small>Fasilitas umum</small>
+                </div>
+
+                <div class="destination-facility-card">
+                    <span><i class="bi bi-shop"></i></span>
+                    <strong>Warung / Kios</strong>
+                    <small>Kebutuhan pengunjung</small>
+                </div>
+
+                <div class="destination-facility-card">
+                    <span><i class="bi bi-camera-fill"></i></span>
+                    <strong>Spot Foto</strong>
+                    <small>Abadikan momen</small>
+                </div>
+
+            </div>
+
+        </section>
+
+        <div class="destination-bottom-ornament" aria-hidden="true">
+            <span></span>
+            <b>VISIT DUMAI</b>
+            <span></span>
         </div>
 
     </div>
+</div>
 
-
-    
 @endsection

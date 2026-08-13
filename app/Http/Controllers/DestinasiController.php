@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Kategori;
 use App\Models\Destinasi;
 use Illuminate\Http\Request;
 
@@ -21,24 +21,33 @@ class DestinasiController extends Controller
      * Menampilkan daftar semua destinasi (halaman destinasi.blade.php).
      */
     public function index(Request $request)
-    {
-        $keyword = $request->input('cari');
+{
+    $keyword = $request->input('cari');
+    $kategoriId = $request->input('kategori');
+ 
+    $destinasiList = Destinasi::when($keyword, function ($query) use ($keyword) {
+            $query->where('nama', 'like', '%' . $keyword . '%');
+        })
+        ->when($kategoriId, function ($query) use ($kategoriId) {
+            $query->where('kategori_id', $kategoriId);
+        })
+        ->with('kategori')
+        ->latest()
+        ->paginate(4)
+        ->appends($request->query());
+ 
+    $kategoriList = Kategori::all();
+ 
+    return view('destinasi', compact('destinasiList', 'keyword', 'kategoriId', 'kategoriList'));
+}
 
-        $destinasiList = Destinasi::when($keyword, function ($query) use ($keyword) {
-                $query->where('nama', 'like', '%' . $keyword . '%');
-            })
-            ->latest()
-            ->paginate(2);
-
-        return view('destinasi', compact('destinasiList', 'keyword'));
-    }
 
     /**
      * Menampilkan detail satu destinasi.
      */
     public function show($id)
     {
-    $destinasi = Destinasi::with(['atraksi', 'ulasan.user'])->findOrFail($id);
+    $destinasi = Destinasi::with(['atraksi', 'ulasan.user', 'kategori'])->findOrFail($id);
 
         return view('destinasi-detail', compact('destinasi'));
     }
@@ -48,7 +57,9 @@ class DestinasiController extends Controller
      */
     public function create()
     {
-        return view('destinasi-create');
+        $kategoriList = Kategori::all();
+    return view('destinasi-create', compact('kategoriList'));
+
     }
 
     /**
@@ -60,6 +71,7 @@ class DestinasiController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'kategori_id' => 'required|exists:kategori,id',
             'nama'        => 'required|string|max:255',
             'deskripsi'   => 'required|string',
             'gambar' => 'required|image|max:15000',
@@ -81,11 +93,12 @@ Destinasi::create($validated);
      * Menampilkan form edit destinasi.
      */
     public function edit($id)
-    {
-        $destinasi = Destinasi::findOrFail($id);
+{
+    $destinasi = Destinasi::findOrFail($id);
+    $kategoriList = Kategori::all();
+    return view('destinasi-edit', compact('destinasi', 'kategoriList'));
+}
 
-        return view('destinasi-edit', compact('destinasi'));
-    }
 
     /**
      * Memperbarui data destinasi yang sudah ada.
@@ -98,6 +111,7 @@ Destinasi::create($validated);
         $destinasi = Destinasi::findOrFail($id);
 
         $validated = $request->validate([
+            'kategori_id' => 'nullable|exists:kategori,id',
             'nama'        => 'required|string|max:255',
             'deskripsi'   => 'required|string',
             'gambar' => 'nullable|image|max:15000',

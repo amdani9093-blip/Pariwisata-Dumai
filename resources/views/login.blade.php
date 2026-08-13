@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('body-class', 'page-auth')
@@ -6,83 +7,114 @@
 @section('content')
 
 <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <div class="login-page">
+
+    {{-- OVERLAY BACKGROUND --}}
+    <div class="login-overlay"></div>
 
     <div class="login-container">
 
         {{-- =========================
-             JUDUL LOGIN
+             HEADER
         ========================== --}}
-        <div class="login-title-box">
-            <h1>MASUK AKUN DULU YA</h1>
+        <div class="login-header">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-umbrella-beach"></i>
+            </div>
+
+            <h1>Selamat Datang</h1>
+
+            <p>
+                Masuk ke akun <strong>Visit Dumai</strong>
+            </p>
+
         </div>
+
 
         {{-- =========================
              AVATAR
         ========================== --}}
         <div class="login-avatar">
+
             <div class="avatar-circle">
+
                 <img
                     src="{{ asset('images/ss.png') }}"
                     alt="Avatar Login"
                 >
+
             </div>
+
         </div>
-{{-- =========================
-     LOGIN SOSIAL
-========================= --}}
-
-<div class="login-divider">
-    <span>atau masuk dengan</span>
-</div>
-
-<div class="social-login">
-
-    {{-- GOOGLE --}}
-    <a
-        href="{{ route('auth.google') }}"
-        class="social-login-btn google"
-    >
-        <i class="fab fa-google"></i>
-        <span>Masuk dengan Google</span>
-    </a>
 
 
-    {{-- WHATSAPP --}}
-<a
-    {{-- WHATSAPP --}}
-    href="https://wa.me/6285278776696"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="social-login-btn whatsapp"
->
-    <i class="fab fa-whatsapp"></i>
-    <span>Hubungi via WhatsApp</span>
-</a>
+        {{-- =========================
+             LOGIN SOSIAL
+        ========================== --}}
+        <div class="login-social-section">
 
-        {{-- Error umum --}}
+            <div class="login-divider">
+                <span>atau masuk dengan</span>
+            </div>
+
+            <a
+                href="{{ route('auth.google') }}"
+                class="social-login-btn google"
+            >
+                <i class="fab fa-google"></i>
+                <span>Masuk dengan Google</span>
+            </a>
+
+        </div>
+
+
+        {{-- =========================
+             ALERT
+        ========================== --}}
         @if (session('status'))
             <div class="login-alert login-success">
-                {{ session('status') }}
+                <i class="fa-solid fa-circle-check"></i>
+                <span>{{ session('status') }}</span>
             </div>
         @endif
 
         @if ($errors->any())
             <div class="login-alert login-danger">
-                {{ $errors->first() }}
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span>{{ $errors->first() }}</span>
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login.submit') }}" novalidate>
+
+        {{-- =========================
+             FORM LOGIN
+        ========================== --}}
+        <form
+            method="POST"
+            action="{{ route('login.submit') }}"
+            class="login-form"
+            novalidate
+        >
+
             @csrf
 
-            {{-- USERNAME / EMAIL --}}
+
+            {{-- EMAIL --}}
             <div class="login-form-group">
-                <label for="email">USERNAME</label>
+
+                <label for="email">
+                    <i class="fa-solid fa-user"></i>
+                    Username / Email
+                </label>
 
                 <div class="login-input">
+
+                    <i class="fa-solid fa-envelope input-icon"></i>
+
                     <input
                         type="email"
                         id="email"
@@ -90,27 +122,40 @@
                         value="{{ old('email') }}"
                         autocomplete="email"
                         autofocus
-                        placeholder="Enter Username"
+                        placeholder="Masukkan username atau email"
                         class="@error('email') input-error @enderror"
                     >
+
                 </div>
 
                 @error('email')
-                    <div class="login-error">{{ $message }}</div>
+                    <div class="login-error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        {{ $message }}
+                    </div>
                 @enderror
+
             </div>
+
 
             {{-- PASSWORD --}}
             <div class="login-form-group">
-                <label for="passwordInput">PASSWORD</label>
+
+                <label for="passwordInput">
+                    <i class="fa-solid fa-lock"></i>
+                    Password
+                </label>
 
                 <div class="login-input password-wrapper">
+
+                    <i class="fa-solid fa-key input-icon"></i>
+
                     <input
                         type="password"
                         id="passwordInput"
                         name="password"
                         autocomplete="current-password"
-                        placeholder="Enter Password"
+                        placeholder="Masukkan password"
                         class="@error('password') input-error @enderror"
                     >
 
@@ -122,49 +167,92 @@
                     >
                         <i class="fas fa-eye"></i>
                     </button>
+
                 </div>
 
                 @error('password')
-                    <div class="login-error">{{ $message }}</div>
+                    <div class="login-error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        {{ $message }}
+                    </div>
                 @enderror
+
             </div>
 
-            {{-- BUTTON LOGIN --}}
-            <button type="submit" class="login-button">
-                Masuk
-            </button>
 
-            {{-- REMEMBER ME --}}
-            <div class="remember-wrapper">
+            {{-- REMEMBER + FORGOT --}}
+            <div class="login-options">
+
                 <label class="remember-label">
+
                     <input
                         type="checkbox"
                         name="remember"
                         id="rememberMe"
                     >
+
+                    <span class="custom-checkbox"></span>
+
                     <span>Ingat Saya</span>
+
                 </label>
+
+                @if (Route::has('password.request'))
+
+                    <a
+                        href="{{ route('password.request') }}"
+                        class="forgot-password"
+                    >
+                        Lupa password?
+                    </a>
+
+                @endif
+
             </div>
+
+
+            {{-- BUTTON LOGIN --}}
+            <button
+                type="submit"
+                class="login-button"
+            >
+                <span>Masuk</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
 
         </form>
 
+
         {{-- =========================
-             FOOTER LOGIN
+             FOOTER
         ========================== --}}
         <div class="login-footer">
 
-            <a href="{{ url('/') }}" class="cancel-button">
-                Cancel
+            <a
+                href="{{ url('/') }}"
+                class="cancel-button"
+            >
+                <i class="fa-solid fa-arrow-left"></i>
+                Kembali ke Beranda
             </a>
 
-            @if (Route::has('password.request'))
-                <a
-                    href="{{ route('password.request') }}"
-                    class="forgot-password"
-                >
-                    Lupa <span>password?</span>
-                </a>
-            @endif
+        </div>
+
+
+        {{-- =========================
+             BRAND FOOTER
+        ========================== --}}
+        <div class="login-brand-footer">
+
+            <i class="fa-solid fa-location-dot"></i>
+
+            <span>
+                Visit Dumai
+            </span>
+
+            <small>
+                Jelajahi Pesona Kota Dumai
+            </small>
 
         </div>
 
@@ -173,39 +261,44 @@
 </div>
 
 
+{{-- =========================
+     PASSWORD TOGGLE
+========================== --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
 
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('passwordInput');
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('passwordInput');
 
-        if (togglePassword && passwordInput) {
+    if (togglePassword && passwordInput) {
 
-            togglePassword.addEventListener('click', function () {
+        togglePassword.addEventListener('click', function () {
 
-                const icon = this.querySelector('i');
+            const icon = this.querySelector('i');
 
-                if (passwordInput.type === 'password') {
+            const isPassword =
+                passwordInput.getAttribute('type') === 'password';
 
-                    passwordInput.type = 'text';
+            passwordInput.setAttribute(
+                'type',
+                isPassword ? 'text' : 'password'
+            );
 
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
 
-                } else {
+            this.setAttribute(
+                'aria-label',
+                isPassword
+                    ? 'Sembunyikan password'
+                    : 'Tampilkan password'
+            );
 
-                    passwordInput.type = 'password';
+        });
 
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
+    }
 
-                }
-
-            });
-
-        }
-
-    });
+});
 </script>
 
 @endsection
