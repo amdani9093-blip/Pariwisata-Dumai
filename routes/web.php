@@ -11,7 +11,7 @@ use App\Http\Controllers\AtraksiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\KategoriController;
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,9 +50,15 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 Route::get('/auth/whatsapp', [AuthController::class, 'redirectToWhatsApp'])
     ->name('auth.whatsapp');
 
-Route::get('/kontak', function () {
-    return view('kontak');
-})->name('kontak');
+
+
+Route::get('/kontak', [KontakController::class, 'index'])
+    ->name('kontak');
+
+Route::post('/kontak/kirim', [KontakController::class, 'send'])
+    ->name('kontak.send');
+
+
 
 Route::get('/tentang', function () {
     return view('tentang');

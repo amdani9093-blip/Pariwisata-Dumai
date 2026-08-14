@@ -1,8 +1,7 @@
-
 @extends('layouts.app')
 
 @section('body-class', 'page-auth')
-@section('title', 'Login - Wisata Kota Dumai')
+@section('title', 'Login - Visit Dumai')
 
 @section('content')
 
@@ -12,247 +11,267 @@
 
 <div class="login-page">
 
-    {{-- OVERLAY BACKGROUND --}}
-    <div class="login-overlay"></div>
+    {{-- Background Decoration --}}
+    <div class="login-decoration decoration-1"></div>
+    <div class="login-decoration decoration-2"></div>
+    <div class="login-decoration decoration-3"></div>
 
-    <div class="login-container">
+    <div class="login-wrapper">
 
-        {{-- =========================
-             HEADER
-        ========================== --}}
-        <div class="login-header">
+        {{-- =========================================
+             LOGIN CARD
+        ========================================== --}}
+        <div class="login-card">
 
-            <div class="brand-icon">
-                <i class="fa-solid fa-umbrella-beach"></i>
+            {{-- LOGO --}}
+            <div class="login-logo">
+
+                <div class="logo-circle">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+
+                <div class="logo-text">
+                    <strong>Visit Dumai</strong>
+                    <span>Wisata Kota Dumai</span>
+                </div>
+
             </div>
 
-            <h1>Selamat Datang</h1>
 
-            <p>
-                Masuk ke akun <strong>Visit Dumai</strong>
-            </p>
+            {{-- HEADER --}}
+            <div class="login-header">
 
-        </div>
+                <h1>Selamat Datang</h1>
+
+                <p>
+                    Silakan masuk untuk melanjutkan
+                </p>
+
+            </div>
 
 
-        {{-- =========================
-             AVATAR
-        ========================== --}}
-        <div class="login-avatar">
+            {{-- ALERT SUCCESS --}}
+            @if (session('status'))
 
-            <div class="avatar-circle">
+                <div class="login-alert success">
 
-                <img
-                    src="{{ asset('images/ss.png') }}"
-                    alt="Avatar Login"
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    <span>
+                        {{ session('status') }}
+                    </span>
+
+                </div>
+
+            @endif
+
+
+            {{-- ALERT ERROR --}}
+            @if ($errors->any())
+
+                <div class="login-alert danger">
+
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                    <span>
+                        {{ $errors->first() }}
+                    </span>
+
+                </div>
+
+            @endif
+
+
+            {{-- =========================================
+                 GOOGLE LOGIN
+            ========================================== --}}
+            @if (Route::has('auth.google'))
+
+                <a href="{{ route('auth.google') }}"
+                   class="google-button">
+
+                    <i class="fab fa-google"></i>
+
+                    <span>
+                        Masuk dengan Google
+                    </span>
+
+                </a>
+
+                <div class="login-divider">
+                    <span>atau</span>
+                </div>
+
+            @endif
+
+
+            {{-- =========================================
+                 LOGIN FORM
+            ========================================== --}}
+            <form
+                method="POST"
+                action="{{ route('login.submit') }}"
+                class="login-form"
+            >
+
+                @csrf
+
+
+                {{-- EMAIL --}}
+                <div class="form-group">
+
+                    <label for="email">
+                        <i class="fa-solid fa-envelope"></i>
+                        Email
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-regular fa-envelope input-icon"></i>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            autocomplete="email"
+                            autofocus
+                            placeholder="Masukkan email Anda"
+                            required
+                        >
+
+                    </div>
+
+                    @error('email')
+
+                        <small class="field-error">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            {{ $message }}
+                        </small>
+
+                    @enderror
+
+                </div>
+
+
+                {{-- PASSWORD --}}
+                <div class="form-group">
+
+                    <div class="password-label-row">
+
+                        <label for="passwordInput">
+                            <i class="fa-solid fa-lock"></i>
+                            Password
+                        </label>
+
+                        @if (Route::has('password.request'))
+
+                            <a href="{{ route('password.request') }}">
+                                Lupa password?
+                            </a>
+
+                        @endif
+
+                    </div>
+
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-key input-icon"></i>
+
+                        <input
+                            type="password"
+                            id="passwordInput"
+                            name="password"
+                            autocomplete="current-password"
+                            placeholder="Masukkan password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="togglePassword"
+                            aria-label="Tampilkan password"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                    @error('password')
+
+                        <small class="field-error">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            {{ $message }}
+                        </small>
+
+                    @enderror
+
+                </div>
+
+
+                {{-- REMEMBER --}}
+                <div class="login-options">
+
+                    <label class="remember">
+
+                        <input
+                            type="checkbox"
+                            name="remember"
+                            id="rememberMe"
+                        >
+
+                        <span class="checkmark"></span>
+
+                        <span>
+                            Ingat saya
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                {{-- LOGIN BUTTON --}}
+                <button
+                    type="submit"
+                    class="login-button"
                 >
 
-            </div>
+                    <span>
+                        Masuk ke Akun
+                    </span>
 
-        </div>
+                    <i class="fa-solid fa-arrow-right"></i>
 
+                </button>
 
-        {{-- =========================
-             LOGIN SOSIAL
-        ========================== --}}
-        <div class="login-social-section">
-
-            <div class="login-divider">
-                <span>atau masuk dengan</span>
-            </div>
-
-            <a
-                href="{{ route('auth.google') }}"
-                class="social-login-btn google"
-            >
-                <i class="fab fa-google"></i>
-                <span>Masuk dengan Google</span>
-            </a>
-
-        </div>
+            </form>
 
 
-        {{-- =========================
-             ALERT
-        ========================== --}}
-        @if (session('status'))
-            <div class="login-alert login-success">
-                <i class="fa-solid fa-circle-check"></i>
-                <span>{{ session('status') }}</span>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="login-alert login-danger">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                <span>{{ $errors->first() }}</span>
-            </div>
-        @endif
-
-
-        {{-- =========================
-             FORM LOGIN
-        ========================== --}}
-        <form
-            method="POST"
-            action="{{ route('login.submit') }}"
-            class="login-form"
-            novalidate
-        >
-
-            @csrf
-
-
-            {{-- EMAIL --}}
-            <div class="login-form-group">
-
-                <label for="email">
-                    <i class="fa-solid fa-user"></i>
-                    Username / Email
-                </label>
-
-                <div class="login-input">
-
-                    <i class="fa-solid fa-envelope input-icon"></i>
-
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value="{{ old('email') }}"
-                        autocomplete="email"
-                        autofocus
-                        placeholder="Masukkan username atau email"
-                        class="@error('email') input-error @enderror"
-                    >
-
-                </div>
-
-                @error('email')
-                    <div class="login-error">
-                        <i class="fa-solid fa-circle-exclamation"></i>
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </div>
-
-
-            {{-- PASSWORD --}}
-            <div class="login-form-group">
-
-                <label for="passwordInput">
-                    <i class="fa-solid fa-lock"></i>
-                    Password
-                </label>
-
-                <div class="login-input password-wrapper">
-
-                    <i class="fa-solid fa-key input-icon"></i>
-
-                    <input
-                        type="password"
-                        id="passwordInput"
-                        name="password"
-                        autocomplete="current-password"
-                        placeholder="Masukkan password"
-                        class="@error('password') input-error @enderror"
-                    >
-
-                    <button
-                        type="button"
-                        class="password-toggle"
-                        id="togglePassword"
-                        aria-label="Tampilkan password"
-                    >
-                        <i class="fas fa-eye"></i>
-                    </button>
-
-                </div>
-
-                @error('password')
-                    <div class="login-error">
-                        <i class="fa-solid fa-circle-exclamation"></i>
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </div>
-
-
-            {{-- REMEMBER + FORGOT --}}
-            <div class="login-options">
-
-                <label class="remember-label">
-
-                    <input
-                        type="checkbox"
-                        name="remember"
-                        id="rememberMe"
-                    >
-
-                    <span class="custom-checkbox"></span>
-
-                    <span>Ingat Saya</span>
-
-                </label>
-
-                @if (Route::has('password.request'))
-
-                    <a
-                        href="{{ route('password.request') }}"
-                        class="forgot-password"
-                    >
-                        Lupa password?
-                    </a>
-
-                @endif
-
-            </div>
-
-
-            {{-- BUTTON LOGIN --}}
-            <button
-                type="submit"
-                class="login-button"
-            >
-                <span>Masuk</span>
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-
-        </form>
-
-
-        {{-- =========================
-             FOOTER
-        ========================== --}}
-        <div class="login-footer">
-
+            {{-- BACK TO HOME --}}
             <a
                 href="{{ url('/') }}"
-                class="cancel-button"
+                class="back-home"
             >
+
                 <i class="fa-solid fa-arrow-left"></i>
+
                 Kembali ke Beranda
+
             </a>
 
-        </div>
 
+            {{-- FOOTER --}}
+            <div class="login-footer">
 
-        {{-- =========================
-             BRAND FOOTER
-        ========================== --}}
-        <div class="login-brand-footer">
+                <span>
+                    <i class="fa-solid fa-compass"></i>
+                    Jelajahi Pesona Kota Dumai
+                </span>
 
-            <i class="fa-solid fa-location-dot"></i>
-
-            <span>
-                Visit Dumai
-            </span>
-
-            <small>
-                Jelajahi Pesona Kota Dumai
-            </small>
+            </div>
 
         </div>
 
@@ -261,44 +280,54 @@
 </div>
 
 
-{{-- =========================
+{{-- =========================================
      PASSWORD TOGGLE
-========================== --}}
+========================================== --}}
 <script>
+
 document.addEventListener('DOMContentLoaded', function () {
 
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordInput = document.getElementById('passwordInput');
+    const togglePassword =
+        document.getElementById('togglePassword');
 
-    if (togglePassword && passwordInput) {
+    const passwordInput =
+        document.getElementById('passwordInput');
 
-        togglePassword.addEventListener('click', function () {
-
-            const icon = this.querySelector('i');
-
-            const isPassword =
-                passwordInput.getAttribute('type') === 'password';
-
-            passwordInput.setAttribute(
-                'type',
-                isPassword ? 'text' : 'password'
-            );
-
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
-
-            this.setAttribute(
-                'aria-label',
-                isPassword
-                    ? 'Sembunyikan password'
-                    : 'Tampilkan password'
-            );
-
-        });
-
+    if (!togglePassword || !passwordInput) {
+        return;
     }
 
+    togglePassword.addEventListener('click', function () {
+
+        const icon = this.querySelector('i');
+
+        const isPassword =
+            passwordInput.type === 'password';
+
+        passwordInput.type =
+            isPassword ? 'text' : 'password';
+
+        icon.classList.toggle(
+            'fa-eye',
+            !isPassword
+        );
+
+        icon.classList.toggle(
+            'fa-eye-slash',
+            isPassword
+        );
+
+        this.setAttribute(
+            'aria-label',
+            isPassword
+                ? 'Sembunyikan password'
+                : 'Tampilkan password'
+        );
+
+    });
+
 });
+
 </script>
 
 @endsection
